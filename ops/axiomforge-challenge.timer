@@ -1,0 +1,11 @@
+[Unit]
+Description=Run AxiomForge Phase 8 grand challenge portfolio cycle daily
+
+[Timer]
+OnBootSec=45min
+OnUnitActiveSec=24h
+RandomizedDelaySec=45min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

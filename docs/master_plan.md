@@ -18,3 +18,6 @@ plan.
 Phase 7 implementation notes are in
 [`phase7_paper_engine.md`](phase7_paper_engine.md). `PLANNING.md` remains the
 authoritative roadmap record.
+
+Phase 8 implementation notes are in
+[`phase8_grand_challenge_portfolio.md`](phase8_grand_challenge_portfolio.md).

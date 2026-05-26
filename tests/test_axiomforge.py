@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from unittest import mock
 
+from axiomforge.challenges import build_portfolio, run_challenge_cycle
 from axiomforge.cli import main
 from axiomforge.kernel import (
     counts,
@@ -516,6 +517,57 @@ Test only.
                 stdout=subprocess.PIPE,
             )
             self.assertEqual(tag_check.returncode, 0)
+
+    def test_phase8_portfolio_separates_real_research_from_infrastructure(self):
+        portfolio = build_portfolio()
+
+        self.assertTrue(portfolio["challenges"])
+        objective_types = {challenge["objective_type"] for challenge in portfolio["challenges"]}
+        self.assertIn("real_research", objective_types)
+        self.assertIn("infrastructure_research", objective_types)
+        for challenge in portfolio["challenges"]:
+            self.assertTrue(challenge["claim_boundary"])
+            self.assertTrue(challenge["verifier_requirements"])
+            self.assertIn("publication_gate", challenge)
+            self.assertNotIn("solved", challenge["claim_boundary"].lower())
+
+    def test_phase8_challenge_cycle_creates_portfolio_and_negative_ledger(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "state"
+            result = run_challenge_cycle(root, execute_route=False, push=False)
+            paths = initialize(root)
+
+            self.assertEqual(result.status, "verified")
+            self.assertEqual(result.route_status, "planned")
+            manifest = Path(result.manifest)
+            self.assertTrue(manifest.exists())
+            data = json.loads(manifest.read_text())
+            self.assertTrue(Path(data["portfolio"]).exists())
+            self.assertTrue(Path(data["selected_challenge"]).exists())
+            self.assertTrue(Path(data["negative_results"]).exists())
+            self.assertEqual(counts(paths)["challenge_runs"], 1)
+            self.assertEqual(counts(paths)["publication_queue"], 1)
+
+    def test_phase8_challenge_cycle_executes_pipeline_route(self):
+        env = {"AXIOMFORGE_PROVIDER_MODE": "offline"}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict("os.environ", env, clear=True):
+            root = Path(tmp) / "state"
+            remote = Path(tmp) / "remote.git"
+            repo = Path(tmp) / "repo"
+            subprocess.run(["git", "init", "--bare", str(remote)], check=True, stdout=subprocess.PIPE)
+            subprocess.run(["git", "clone", str(remote), str(repo)], check=True, stdout=subprocess.PIPE)
+
+            result = run_challenge_cycle(root, repo=repo, execute_route=True, push=False, timeout_seconds=20)
+
+            self.assertEqual(result.status, "verified")
+            self.assertEqual(result.route_status, "passed")
+            manifest = Path(result.manifest)
+            route_result = json.loads(Path(json.loads(manifest.read_text())["route_result"]).read_text())
+            stages = {step["stage"] for step in route_result["steps"]}
+            self.assertTrue({"builder", "proof", "skeptic_replicator", "publisher", "site", "release", "paper"}.issubset(stages))
+            self.assertTrue(list((repo / "release-candidates").glob("*/release-manifest.json")))
+            self.assertTrue(list((repo / "paper-drafts").glob("*/paper-manifest.json")))
+            self.assertEqual(counts(initialize(root))["challenge_runs"], 1)
 
     def test_cli_init(self):
         with tempfile.TemporaryDirectory() as tmp:

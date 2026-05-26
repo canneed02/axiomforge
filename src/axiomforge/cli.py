@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 
+from .challenges import run_challenge_cycle
 from .kernel import counts, create_task, initialize, publish_lab_note, register_artifact, run_bootstrap_cycle
 from .paper import build_paper_package
 from .providers import nvidia_inventory_from_env
@@ -68,6 +69,13 @@ def main() -> None:
     paper.add_argument("--repo", type=Path, default=Path(os.getenv("AXIOMFORGE_PUBLICATION_REPO", "./publication-repo")))
     paper.add_argument("--branch", default=os.getenv("AXIOMFORGE_PUBLICATION_BRANCH", DEFAULT_PUBLICATION_BRANCH))
     paper.add_argument("--no-push", action="store_true")
+
+    challenge = subparsers.add_parser("challenge-cycle", help="Run one Phase 8 grand challenge portfolio cycle.")
+    challenge.add_argument("--repo", type=Path, default=Path(os.getenv("AXIOMFORGE_PUBLICATION_REPO", "./publication-repo")))
+    challenge.add_argument("--branch", default=os.getenv("AXIOMFORGE_PUBLICATION_BRANCH", DEFAULT_PUBLICATION_BRANCH))
+    challenge.add_argument("--execute-route", action="store_true")
+    challenge.add_argument("--timeout-seconds", type=int, default=30)
+    challenge.add_argument("--no-push", action="store_true")
 
     task = subparsers.add_parser("create-task", help="Create a research task.")
     task.add_argument("--title", required=True)
@@ -149,6 +157,20 @@ def main() -> None:
         result = build_paper_package(root, args.repo, branch=args.branch, push=not args.no_push)
         print(json.dumps(result.__dict__, sort_keys=True))
         if result.status != "passed":
+            raise SystemExit(1)
+        return
+
+    if args.command == "challenge-cycle":
+        result = run_challenge_cycle(
+            root,
+            repo=args.repo,
+            branch=args.branch,
+            execute_route=args.execute_route,
+            push=not args.no_push,
+            timeout_seconds=args.timeout_seconds,
+        )
+        print(json.dumps(result.__dict__, sort_keys=True))
+        if result.status == "blocked":
             raise SystemExit(1)
         return
 

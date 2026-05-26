@@ -182,6 +182,13 @@ def initialize(root: Path) -> ForgePaths:
                 status TEXT NOT NULL,
                 paper_json TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS challenge_runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                challenge_id TEXT NOT NULL,
+                status TEXT NOT NULL,
+                challenge_json TEXT NOT NULL
+            );
             """
         )
         db.execute(
@@ -532,6 +539,27 @@ def register_paper_run(
     return run_id
 
 
+def register_challenge_run(
+    p: ForgePaths,
+    *,
+    challenge_id: str,
+    status: str,
+    challenge: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    with db_session(p) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO challenge_runs (ts, challenge_id, status, challenge_json)
+            VALUES (?, ?, ?, ?)
+            """,
+            (ts, challenge_id, status, json.dumps(challenge, sort_keys=True)),
+        )
+        run_id = int(cursor.lastrowid)
+    append_event(p, "challenge_run.registered", {"id": run_id, "challenge_id": challenge_id, "status": status})
+    return run_id
+
+
 def queued_publications(p: ForgePaths, status: str = "ready") -> list[PublicationQueueItem]:
     with db_session(p) as db:
         rows = db.execute(
@@ -625,6 +653,7 @@ def counts(p: ForgePaths) -> dict[str, int]:
                 "replication_runs",
                 "release_runs",
                 "paper_runs",
+                "challenge_runs",
             ]
         }
 

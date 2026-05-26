@@ -162,6 +162,24 @@ Phase 7 adds the paper engine and DOI/arXiv-ready package pipeline:
 The paper engine prepares packages only. It does not submit to arXiv or DOI
 providers under a human identity.
 
+## Phase 8
+
+Phase 8 adds the grand challenge portfolio and route orchestrator:
+
+- machine-readable portfolio of serious research programs
+- separation between real research objectives and infrastructure research
+- explicit claim boundaries
+- verifier requirements
+- dataset assumptions
+- expected-evidence prioritization
+- negative-result ledger
+- full route execution through builder, proof, skeptic, replicator, publisher,
+  site, release, and paper engines
+
+The portfolio chooses work by expected evidence value, not hype. It does not
+claim that an open problem is solved unless the later evidence chain supports
+that claim.
+
 ## Quickstart
 
 ```bash
@@ -181,6 +199,7 @@ axiomforge --root ./state publish-ready --repo ./publication-repo --branch auton
 axiomforge site-build --repo ./publication-repo --branch autonomous-publications
 axiomforge --root ./state release-cycle --repo ./publication-repo --branch autonomous-publications
 axiomforge --root ./state paper-cycle --repo ./publication-repo --branch autonomous-publications
+axiomforge --root ./state challenge-cycle --repo ./publication-repo --branch autonomous-publications --execute-route
 ```
 
 ## Core Rule
