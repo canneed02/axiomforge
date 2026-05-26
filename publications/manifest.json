@@ -325,7 +325,24 @@
       "queue_id": 24,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-061252-778184-phase-4-review-replication-cycle.md",
       "title": "Phase 4 Review Replication Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000025-2026-05-26-061319-381174-phase-8-grand-challenge-portfolio-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "challenge_id": "formal_micro_conjecture_factory",
+        "claim_boundary": "Only machine-checked micro-claims or explicit counterexamples may be reported.",
+        "claim_type": "measured",
+        "evidence": "task_id=25; challenge_run_id=2; portfolio=/root/axiomforge-state/artifacts/challenge-runs/2026-05-26T061251.720085Z0000-formal-micro-conjecture-factory/portfolio.json; selected=/root/axiomforge-state/artifacts/challenge-runs/2026-05-26T061251.720085Z0000-formal-micro-conjecture-factory/selected_challenge.json; route=/root/axiomforge-state/artifacts/challenge-runs/2026-05-26T061251.720085Z0000-formal-micro-conjecture-factory/route_plan.json; negative_results=/root/axiomforge-state/artifacts/challenge-runs/2026-05-26T061251.720085Z0000-formal-micro-conjecture-factory/negative_results.json; route_result=/root/axiomforge-state/artifacts/challenge-runs/2026-05-26T061251.720085Z0000-formal-micro-conjecture-factory/route_result.json",
+        "objective_type": "real_research",
+        "overclaim_block": true,
+        "route_status": "passed"
+      },
+      "published_at": "2026-05-26T06:13:22.014596+00:00",
+      "queue_id": 25,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-061319-381174-phase-8-grand-challenge-portfolio-cycle.md",
+      "title": "Phase 8 Grand Challenge Portfolio Cycle"
     }
   ],
-  "updated_at": "2026-05-26T06:13:00.945332+00:00"
+  "updated_at": "2026-05-26T06:13:22.014532+00:00"
 }
