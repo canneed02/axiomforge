@@ -266,7 +266,20 @@
       "queue_id": 20,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-060832-283039-phase-8-grand-challenge-portfolio-cycle.md",
       "title": "Phase 8 Grand Challenge Portfolio Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000021-2026-05-26-061006-113647-phase-1-research-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=24; run_id=8; proposal=/root/axiomforge-state/artifacts/research-runs/2026-05-26T060949.941850Z0000-maintain-autonomous-research-memory/proposal.json; verifier=/root/axiomforge-state/artifacts/research-runs/2026-05-26T060949.941850Z0000-maintain-autonomous-research-memory/verifier.json",
+        "verifier_passed": true
+      },
+      "published_at": "2026-05-26T06:12:55.912889+00:00",
+      "queue_id": 21,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-061006-113647-phase-1-research-cycle.md",
+      "title": "Phase 1 Research Cycle"
     }
   ],
-  "updated_at": "2026-05-26T06:09:08.441183+00:00"
+  "updated_at": "2026-05-26T06:12:55.912768+00:00"
 }
