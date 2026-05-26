@@ -70,7 +70,22 @@
       "queue_id": 5,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-012854-979100-phase-3-proof-experiment-cycle.md",
       "title": "Phase 3 Proof Experiment Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000006-2026-05-26-013638-244916-phase-4-review-replication-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=9; review_id=1; replication_id=1; review=/root/axiomforge-state/artifacts/review-runs/2026-05-26T013637.878181Z0000-proof-run-1/skeptic_review.json; replication=/root/axiomforge-state/artifacts/review-runs/2026-05-26T013637.878181Z0000-proof-run-1/replication.json; gate=/root/axiomforge-state/artifacts/review-runs/2026-05-26T013637.878181Z0000-proof-run-1/gate.json",
+        "publication_gate": "passed",
+        "replication_passed": true,
+        "skeptic_review_passed": true
+      },
+      "published_at": "2026-05-26T01:36:50.455799+00:00",
+      "queue_id": 6,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-013638-244916-phase-4-review-replication-cycle.md",
+      "title": "Phase 4 Review Replication Cycle"
     }
   ],
-  "updated_at": "2026-05-26T01:29:11.778943+00:00"
+  "updated_at": "2026-05-26T01:36:50.455667+00:00"
 }
