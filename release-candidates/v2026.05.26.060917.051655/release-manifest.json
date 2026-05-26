@@ -1,0 +1,158 @@
+{
+  "artifacts": {
+    "checksums": "release-candidates/v2026.05.26.060917.051655/checksums.txt",
+    "publication_manifest": "publications/manifest.json",
+    "site_manifest": "site-manifest.json",
+    "site_url": "https://canneed02.github.io/axiomforge/",
+    "tarball": "release-candidates/v2026.05.26.060917.051655/axiomforge-public-ledger-v2026.05.26.060917.051655.tar.gz"
+  },
+  "branch": "autonomous-publications",
+  "gate_context": {
+    "publication_manifest_items": 18,
+    "replication": {
+      "id": 4,
+      "payload": {
+        "clean_workspace": "/root/axiomforge-state/artifacts/review-runs/2026-05-26T060808.080902Z0000-proof-run-4/replication-workspace",
+        "commands": [
+          {
+            "command": [
+              "/root/axiomforge/.venv/bin/python",
+              "harnesses/symbolic_identity.py"
+            ],
+            "exit_code": 0,
+            "name": "symbolic",
+            "parsed": {
+              "claim": "For all symbolic x, (x + 1)^3 equals x^3 + 3*x^2 + 3*x + 1.",
+              "machine_checkable": true,
+              "method": "expand and simplify polynomial identity to normal form",
+              "normal_form": "0",
+              "status": "proved",
+              "tool": "sympy",
+              "tool_version": "1.14.0"
+            },
+            "stderr": "",
+            "stdout": "{\"claim\": \"For all symbolic x, (x + 1)^3 equals x^3 + 3*x^2 + 3*x + 1.\", \"machine_checkable\": true, \"method\": \"expand and simplify polynomial identity to normal form\", \"normal_form\": \"0\", \"status\": \"proved\", \"tool\": \"sympy\", \"tool_version\": \"1.14.0\"}\n",
+            "timed_out": false
+          },
+          {
+            "command": [
+              "/root/axiomforge/.venv/bin/python",
+              "harnesses/empirical_sort_invariant.py"
+            ],
+            "exit_code": 0,
+            "name": "empirical",
+            "parsed": {
+              "claim": "Python sorted returns a nondecreasing sequence preserving the input multiset for generated integer lists.",
+              "failures": [],
+              "machine_checkable": true,
+              "method": "deterministic seeded empirical invariant check",
+              "seed": 20260526,
+              "status": "replicated",
+              "tool": "python",
+              "tool_version": "3.12.3",
+              "trials": 200
+            },
+            "stderr": "",
+            "stdout": "{\"claim\": \"Python sorted returns a nondecreasing sequence preserving the input multiset for generated integer lists.\", \"failures\": [], \"machine_checkable\": true, \"method\": \"deterministic seeded empirical invariant check\", \"seed\": 20260526, \"status\": \"replicated\", \"tool\": \"python\", \"tool_version\": \"3.12.3\", \"trials\": 200}\n",
+            "timed_out": false
+          }
+        ],
+        "comparisons": {
+          "expected_status": "verified",
+          "harness_statuses_match": true,
+          "observed_status": "verified",
+          "same_status": true
+        },
+        "generated_at": "2026-05-26T06:08:08.399054+00:00",
+        "generated_by": "AxiomForge Replicator Agent",
+        "hashes": {
+          "empirical_script": "51d9d528623cb4c4c19414f5462151c6d084e9371c3cf103f324803102265290",
+          "symbolic_script": "4079f1aace4b2ea215c88c69f4125f74c7036d3f57709f2b7c235af4859ae366"
+        },
+        "limitations": [
+          "replication reruns copied harness scripts in a clean workspace",
+          "it does not yet rebuild the entire repository from a fresh clone"
+        ],
+        "original_run_dir": "/root/axiomforge-state/artifacts/proof-runs/2026-05-26T060807.685573Z0000-generate-a-counterexample-first-formal-micro-claim-harness-with-explicit-failure-recording",
+        "python": "3.12.3",
+        "replicated_verifier": {
+          "checks": {
+            "commands_ok": true,
+            "empirical_replicated": true,
+            "has_machine_checkable_outputs": true,
+            "symbolic_proved": true
+          },
+          "claim_boundary": "symbolic proof covers the polynomial identity; empirical result covers deterministic generated samples only",
+          "generated_at": "2026-05-26T06:08:08.399016+00:00",
+          "generated_by": "AxiomForge autonomous research system",
+          "harness_statuses": {
+            "empirical": "replicated",
+            "symbolic": "proved"
+          },
+          "limitations": [
+            "the symbolic proof target is a bounded identity check, not a broad theorem discovery result",
+            "the empirical harness demonstrates deterministic experiment capture, not universal program correctness",
+            "future phases must add adversarial skeptic and clean replication gates"
+          ],
+          "objective": "generate a counterexample-first formal micro-claim harness with explicit failure recording",
+          "phase": "phase3_proof_experiment_harness",
+          "status": "verified"
+        },
+        "status": "passed",
+        "subject_id": 4,
+        "subject_type": "proof_run"
+      },
+      "status": "passed",
+      "subject_id": 4,
+      "subject_type": "proof_run",
+      "ts": "2026-05-26T06:08:08.423480+00:00"
+    },
+    "review": {
+      "id": 4,
+      "payload": {
+        "generated_at": "2026-05-26T06:08:08.080922+00:00",
+        "generated_by": "AxiomForge Skeptic Agent",
+        "limitations": [
+          "skeptic review is rule-based in Phase 4",
+          "model-generated review text is not treated as proof",
+          "future phases should add independent model and human-readable critique layers"
+        ],
+        "objections": [
+          {
+            "message": "Phase 4 accepts this only as infrastructure validation, not a new scientific theorem.",
+            "required_fix": "keep public claim type measured",
+            "severity": "info"
+          }
+        ],
+        "read_inputs": {
+          "harness_statuses": {
+            "empirical": "replicated",
+            "symbolic": "proved"
+          },
+          "manifest_hash_count": 4,
+          "raw_result_count": 2,
+          "verifier_status": "verified"
+        },
+        "status": "passed",
+        "subject_id": 4,
+        "subject_type": "proof_run"
+      },
+      "status": "passed",
+      "subject_id": 4,
+      "subject_type": "proof_run",
+      "ts": "2026-05-26T06:08:08.420047+00:00"
+    },
+    "site_manifest_items": 18
+  },
+  "gate_errors": [],
+  "generated_by": "AxiomForge Autonomous System",
+  "limitations": [
+    "release candidate packages public ledger artifacts only",
+    "release does not claim final scientific discovery",
+    "immutability is enforced by unique versioned paths and git tags"
+  ],
+  "site_url": "https://canneed02.github.io/axiomforge/",
+  "status": "passed",
+  "tag": "axiomforge-public-ledger-v2026.05.26.060917.051655",
+  "version": "v2026.05.26.060917.051655"
+}
