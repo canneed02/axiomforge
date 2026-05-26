@@ -542,20 +542,20 @@ axiomforge-public-ledger-v2026.05.26.054426.861148
 
 ## Next Phase
 
-The next phase is Phase 7: paper engine and DOI/arXiv-ready pipeline.
+Phase 7 is complete.
 
 Phase 7 success criteria:
 
-- generate paper drafts from gated public artifacts
+- generate paper drafts from gated public artifacts: complete
 - include abstract, method, evidence table, limitations, reproducibility
-  appendix, and artifact manifest references
+  appendix, and artifact manifest references: complete
 - produce a DOI/arXiv-ready package without automatically impersonating a human
-  submitter
-- include bot-authorship disclosure on every draft
+  submitter: complete
+- include bot-authorship disclosure on every draft: complete
 - block paper packages if release artifacts, site, skeptic review, replication,
-  or evidence manifests are missing
-- prepare citation and bibliography metadata for public artifacts
-- keep generated drafts versioned and immutable after publication
+  or evidence manifests are missing: complete
+- prepare citation and bibliography metadata for public artifacts: complete
+- keep generated drafts versioned and immutable after publication: complete
 
 Phase 7 is not allowed to:
 
@@ -563,3 +563,32 @@ Phase 7 is not allowed to:
 - claim scientific novelty from infrastructure validation alone
 - hide limitations or failed replication
 - cite artifacts that do not exist in the public ledger
+
+First paper draft package:
+
+```text
+axiomforge-paper-draft-v2026.05.26.055551.762979
+```
+
+## Next Phase
+
+The next phase is Phase 8: grand challenge research portfolio.
+
+Phase 8 success criteria:
+
+- create a machine-readable portfolio of grand challenge programs
+- separate infrastructure maintenance tasks from real research objectives
+- define claim boundaries, verifier requirements, datasets, and publication
+  gates for each challenge
+- route challenge work through existing builder, proof, skeptic, replicator,
+  site, release, and paper engines
+- prioritize tasks by expected evidence value, not hype
+- keep failed attempts and negative results visible in the internal ledger
+
+Phase 8 is not allowed to:
+
+- claim that AxiomForge solved an open problem without machine-checkable or
+  independently reproducible evidence
+- let a single agent bypass skeptic or replication gates
+- optimize for public noise over verified progress
+- erase failed challenge attempts

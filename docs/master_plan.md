@@ -8,7 +8,7 @@ This file exists only as a compatibility entry point for readers who start from
 Current locked next phase:
 
 ```text
-Phase 7: paper engine and DOI/arXiv-ready pipeline
+Phase 8: grand challenge research portfolio
 ```
 
 The autonomous publisher already exists as an early supporting capability, but

@@ -18,7 +18,7 @@ If another document disagrees with `PLANNING.md`, `PLANNING.md` wins.
 Current next phase:
 
 ```text
-Phase 7: paper engine and DOI/arXiv-ready pipeline
+Phase 8: grand challenge research portfolio
 ```
 
 ## Phase 0
