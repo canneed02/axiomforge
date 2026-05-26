@@ -8,7 +8,7 @@ This file exists only as a compatibility entry point for readers who start from
 Current locked next phase:
 
 ```text
-Phase 2: sandbox code-writing agent
+Phase 4: reviewer and replicator multi-agent gate
 ```
 
 The autonomous publisher already exists as an early supporting capability, but

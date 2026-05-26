@@ -18,7 +18,7 @@ If another document disagrees with `PLANNING.md`, `PLANNING.md` wins.
 Current next phase:
 
 ```text
-Phase 2: sandbox code-writing agent
+Phase 4: reviewer and replicator multi-agent gate
 ```
 
 ## Phase 0

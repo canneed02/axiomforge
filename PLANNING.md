@@ -354,6 +354,12 @@ Completed:
 - `axiomforge-code.timer` runs the sandbox code-writing agent
 - server smoke code-cycle passed with tests, diff artifact, command logs, and
   clean secret scan
+- Phase 3 proof and experiment harness exists and is deployed on the server
+- proof-cycle artifacts include bounded workspace, raw results, verifier, and
+  manifest hashes
+- `axiomforge-proof.timer` runs the proof and experiment harness
+- server smoke proof-cycle passed with verifier status `verified`, symbolic
+  status `proved`, and empirical status `replicated`
 
 Important correction:
 
@@ -398,21 +404,26 @@ objective
   -> publication queue only if gates pass
 ```
 
-## Next Phase
+## Phase 3 Completion
 
-The next phase is Phase 3: proof and experiment harness.
+Phase 3 is complete.
 
 Phase 3 success criteria:
 
-- create a proof/experiment run registry
-- support at least one symbolic harness, initially Z3 or SymPy
-- support at least one empirical experiment harness with deterministic seeds
-- store raw stdout, stderr, commands, versions, inputs, outputs, and hashes
+- create a proof/experiment run registry: complete
+- support at least one symbolic harness, initially Z3 or SymPy: complete with
+  SymPy
+- support at least one empirical experiment harness with deterministic seeds:
+  complete
+- store raw stdout, stderr, commands, versions, inputs, outputs, and hashes:
+  complete
 - generate verifier artifacts that distinguish proof, counterexample, and
-  inconclusive results
-- feed successful proof/experiment artifacts into Skeptic pre-checks
-- block publication if proof/experiment evidence is missing or inconclusive
-- keep all execution inside bounded workspaces
+  inconclusive results: complete
+- feed successful proof/experiment artifacts into Skeptic pre-checks:
+  deferred to Phase 4 reviewer and replicator gate
+- block publication if proof/experiment evidence is missing or inconclusive:
+  complete
+- keep all execution inside bounded workspaces: complete
 
 Phase 3 is not allowed to:
 
@@ -422,3 +433,29 @@ Phase 3 is not allowed to:
 - hide inconclusive or negative results
 - run unbounded solver or experiment jobs
 - publish proof/experiment claims without a verifier artifact
+
+## Next Phase
+
+The next phase is Phase 4: reviewer and replicator multi-agent gate.
+
+Phase 4 success criteria:
+
+- create reviewer and replication run registries
+- Skeptic Agent reads claims, evidence, raw logs, verifier artifacts, and
+  publication policy before public eligibility
+- Replicator Agent reruns proof/code/experiment artifacts from a clean workspace
+- reviewer output includes objections, severity, and required fixes
+- replication output includes commands, hashes, pass/fail status, and
+  environment details
+- publication queue only receives `ready` status when policy, skeptic, and
+  replicator gates pass
+- failed review or replication creates follow-up tasks rather than hiding the
+  failure
+
+Phase 4 is not allowed to:
+
+- mark a claim publishable without skeptic review
+- mark a claim publishable without clean replication
+- suppress reviewer objections
+- overwrite raw evidence from the original run
+- treat model-generated review text as proof
