@@ -16,6 +16,7 @@ from axiomforge.kernel import (
 )
 from axiomforge.policy import validate_lab_note
 from axiomforge.providers import nvidia_inventory_from_env
+from axiomforge.proof import build_verifier, run_proof_cycle
 from axiomforge.publisher import publish_ready_queue
 from axiomforge.research import run_phase1_research_cycle
 from axiomforge.sandbox import _safe_identifier, run_code_cycle, run_command, scan_for_secrets, validate_command
@@ -224,6 +225,36 @@ class AxiomForgeTest(unittest.TestCase):
         self.assertEqual(_safe_identifier("123 bad-name", "fallback_name"), "fallback_name")
         self.assertEqual(_safe_identifier("class", "fallback_name"), "fallback_name")
         self.assertEqual(_safe_identifier("Good_Name", "fallback_name"), "good_name")
+
+    def test_phase3_proof_cycle_creates_verifier_artifacts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = run_proof_cycle(Path(tmp), "validate bounded proof experiment harness", timeout_seconds=20)
+            paths = initialize(Path(tmp))
+
+            self.assertTrue(out.exists())
+            registry_counts = counts(paths)
+            self.assertEqual(registry_counts["proof_runs"], 1)
+            self.assertEqual(registry_counts["publication_queue"], 1)
+            self.assertEqual(registry_counts["publications"], 1)
+            self.assertIn("Phase 3 proof/experiment cycle", out.read_text())
+            verifier_paths = list((Path(tmp) / "artifacts" / "proof-runs").glob("*/verifier.json"))
+            self.assertTrue(verifier_paths)
+            self.assertIn('"status": "verified"', verifier_paths[0].read_text())
+
+    def test_phase3_verifier_distinguishes_counterexample(self):
+        class FakeResult:
+            def __init__(self, name, status):
+                self.name = name
+                self.exit_code = 0
+                self.timed_out = False
+                self.parsed = {"status": status, "machine_checkable": True}
+
+        verifier = build_verifier(
+            "counterexample test",
+            [FakeResult("symbolic", "proved"), FakeResult("empirical", "counterexample")],
+        )
+
+        self.assertEqual(verifier["status"], "counterexample")
 
     def test_cli_init(self):
         with tempfile.TemporaryDirectory() as tmp:

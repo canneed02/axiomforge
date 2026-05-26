@@ -3,7 +3,9 @@ name = "axiomforge"
 version = "0.1.0"
 description = "Autonomous research institution kernel."
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "sympy>=1.13,<2",
+]
 
 [project.scripts]
 axiomforge = "axiomforge.cli:main"
@@ -11,4 +13,3 @@ axiomforge = "axiomforge.cli:main"
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
-

@@ -144,6 +144,14 @@ def initialize(root: Path) -> ForgePaths:
                 status TEXT NOT NULL,
                 summary_json TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS proof_runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                objective TEXT NOT NULL,
+                workspace TEXT NOT NULL,
+                status TEXT NOT NULL,
+                verifier_json TEXT NOT NULL
+            );
             """
         )
         db.execute(
@@ -282,7 +290,7 @@ def register_code_run(
     summary: dict[str, Any],
 ) -> int:
     ts = utc_now()
-    with sqlite3.connect(p.db) as db:
+    with db_session(p) as db:
         cursor = db.execute(
             """
             INSERT INTO code_runs (ts, objective, workspace, status, summary_json)
@@ -292,6 +300,28 @@ def register_code_run(
         )
         run_id = int(cursor.lastrowid)
     append_event(p, "code_run.registered", {"id": run_id, "objective": objective, "status": status})
+    return run_id
+
+
+def register_proof_run(
+    p: ForgePaths,
+    *,
+    objective: str,
+    workspace: Path,
+    status: str,
+    verifier: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    with db_session(p) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO proof_runs (ts, objective, workspace, status, verifier_json)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (ts, objective, str(workspace), status, json.dumps(verifier, sort_keys=True)),
+        )
+        run_id = int(cursor.lastrowid)
+    append_event(p, "proof_run.registered", {"id": run_id, "objective": objective, "status": status})
     return run_id
 
 
@@ -383,6 +413,7 @@ def counts(p: ForgePaths) -> dict[str, int]:
                 "research_runs",
                 "publication_queue",
                 "code_runs",
+                "proof_runs",
             ]
         }
 

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .kernel import counts, create_task, initialize, publish_lab_note, register_artifact, run_bootstrap_cycle
 from .providers import nvidia_inventory_from_env
+from .proof import run_proof_cycle
 from .publisher import DEFAULT_PUBLICATION_BRANCH, publish_ready_queue
 from .research import run_phase1_research_cycle
 from .sandbox import run_code_cycle
@@ -34,6 +35,10 @@ def main() -> None:
     code_cycle = subparsers.add_parser("code-cycle", help="Run one Phase 2 sandbox code-writing cycle.")
     code_cycle.add_argument("--objective", required=True)
     code_cycle.add_argument("--timeout-seconds", type=int, default=30)
+
+    proof_cycle = subparsers.add_parser("proof-cycle", help="Run one Phase 3 proof/experiment cycle.")
+    proof_cycle.add_argument("--objective", required=True)
+    proof_cycle.add_argument("--timeout-seconds", type=int, default=45)
 
     subparsers.add_parser("provider-inventory", help="Print redacted provider inventory.")
 
@@ -82,6 +87,11 @@ def main() -> None:
 
     if args.command == "code-cycle":
         out = run_code_cycle(root, args.objective, timeout_seconds=args.timeout_seconds)
+        print(f"lab_note={out}")
+        return
+
+    if args.command == "proof-cycle":
+        out = run_proof_cycle(root, args.objective, timeout_seconds=args.timeout_seconds)
         print(f"lab_note={out}")
         return
 

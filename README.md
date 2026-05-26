@@ -66,6 +66,21 @@ Phase 2 adds the sandbox code-writing agent:
 
 The agent can create code artifacts without writing directly to `main`.
 
+## Phase 3
+
+Phase 3 adds the proof and experiment harness:
+
+- bounded proof-run workspaces
+- SymPy symbolic identity harness
+- deterministic empirical experiment harness
+- raw stdout/stderr/exit-code capture
+- tool/version capture
+- verifier artifact with `verified`, `counterexample`, or `inconclusive`
+- manifest hashes
+
+The system can measure proof and experiment infrastructure without claiming a
+new theorem or broad empirical result.
+
 ## Early Publication Capability
 
 Autonomous publication has been implemented early as supporting infrastructure:
@@ -91,6 +106,7 @@ axiomforge --root ./state status
 axiomforge --root ./state cycle --goal "bootstrap autonomous research memory"
 axiomforge --root ./state research-cycle --goal "maintain autonomous research memory"
 axiomforge --root ./state code-cycle --objective "maintain sandbox code-writing capability"
+axiomforge --root ./state proof-cycle --objective "maintain proof and experiment harness"
 axiomforge --root ./state provider-inventory
 axiomforge --root ./state publish-ready --repo ./publication-repo --branch autonomous-publications
 ```
