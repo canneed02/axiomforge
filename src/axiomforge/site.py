@@ -1,0 +1,317 @@
+from __future__ import annotations
+
+import html
+import json
+import os
+import re
+import subprocess
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from .publisher import BOT_EMAIL, BOT_NAME, DEFAULT_PUBLICATION_BRANCH
+
+
+CORRECTION_PATH = "https://github.com/canneed02/axiomforge/issues"
+
+
+@dataclass(frozen=True)
+class SiteBuildResult:
+    status: str
+    pages: tuple[str, ...]
+    errors: tuple[str, ...]
+
+
+def _run_git(repo: Path, args: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "-C", str(repo), *args],
+        check=check,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+
+def _prepare_branch(repo: Path, branch: str) -> None:
+    if not (repo / ".git").exists():
+        raise ValueError(f"site repo is not a git checkout: {repo}")
+    _run_git(repo, ["fetch", "origin", branch], check=False)
+    checkout = _run_git(repo, ["checkout", branch], check=False)
+    if checkout.returncode == 0:
+        _run_git(repo, ["pull", "--ff-only", "origin", branch], check=False)
+        return
+    raise ValueError(f"publication branch does not exist: {branch}")
+
+
+def _load_manifest(repo: Path) -> dict[str, Any]:
+    path = repo / "publications" / "manifest.json"
+    if not path.exists():
+        return {"generated_by": BOT_NAME, "items": []}
+    return json.loads(path.read_text())
+
+
+def _extract_note_metadata(note_path: Path) -> dict[str, Any]:
+    text = note_path.read_text(errors="replace")
+    title_match = re.search(r"^#\s+(.+)$", text, re.MULTILINE)
+    claim_match = re.search(r"Claim type:\s+`([^`]+)`", text)
+    evidence_match = re.search(r"Evidence:\s*\n\n```text\n(.*?)\n```", text, re.DOTALL)
+    return {
+        "title": title_match.group(1).strip() if title_match else note_path.stem,
+        "claim_type": claim_match.group(1).strip() if claim_match else "",
+        "evidence": evidence_match.group(1).strip() if evidence_match else "",
+        "has_autonomous_disclosure": "autonomous research system" in text.lower(),
+        "has_limitations": "limitation" in text.lower(),
+        "text": text,
+    }
+
+
+def _render_markdown_subset(markdown: str) -> str:
+    lines = markdown.splitlines()
+    blocks: list[str] = []
+    paragraph: list[str] = []
+    in_code = False
+    code_lines: list[str] = []
+
+    def flush_paragraph() -> None:
+        if paragraph:
+            blocks.append(f"<p>{html.escape(' '.join(paragraph))}</p>")
+            paragraph.clear()
+
+    for line in lines:
+        if line.startswith("```"):
+            if in_code:
+                blocks.append(f"<pre><code>{html.escape(chr(10).join(code_lines))}</code></pre>")
+                code_lines.clear()
+                in_code = False
+            else:
+                flush_paragraph()
+                in_code = True
+            continue
+        if in_code:
+            code_lines.append(line)
+            continue
+        if not line.strip():
+            flush_paragraph()
+            continue
+        if line.startswith("# "):
+            flush_paragraph()
+            blocks.append(f"<h1>{html.escape(line[2:].strip())}</h1>")
+            continue
+        if line.startswith("## "):
+            flush_paragraph()
+            blocks.append(f"<h2>{html.escape(line[3:].strip())}</h2>")
+            continue
+        if line.startswith("- "):
+            flush_paragraph()
+            blocks.append(f"<p>{html.escape(line.strip())}</p>")
+            continue
+        paragraph.append(line.strip())
+    flush_paragraph()
+    if in_code:
+        blocks.append(f"<pre><code>{html.escape(chr(10).join(code_lines))}</code></pre>")
+    return "\n".join(blocks)
+
+
+def _page(title: str, body: str) -> str:
+    escaped_title = html.escape(title)
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{escaped_title}</title>
+  <style>
+    body {{ font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; margin: 0; color: #141414; background: #f7f7f4; }}
+    main {{ max-width: 980px; margin: 0 auto; padding: 40px 20px 72px; }}
+    header {{ border-bottom: 1px solid #d8d8d2; margin-bottom: 28px; padding-bottom: 18px; }}
+    h1, h2 {{ line-height: 1.18; }}
+    a {{ color: #064f7d; }}
+    .meta, footer {{ color: #555; font-size: 0.95rem; }}
+    .ledger {{ border-collapse: collapse; width: 100%; background: white; }}
+    .ledger th, .ledger td {{ border: 1px solid #d8d8d2; padding: 10px; text-align: left; vertical-align: top; }}
+    pre {{ background: #202124; color: #f1f3f4; padding: 14px; overflow-x: auto; }}
+    code {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
+  </style>
+</head>
+<body>
+<main>
+{body}
+<footer>
+  <p>Generated by AxiomForge Autonomous System. Correction path: <a href="{CORRECTION_PATH}">{CORRECTION_PATH}</a>.</p>
+</footer>
+</main>
+</body>
+</html>
+"""
+
+
+def _relative_html_path(markdown_path: str) -> str:
+    path = Path(markdown_path)
+    return str(path.with_suffix(".html"))
+
+
+def build_public_site(repo: Path) -> SiteBuildResult:
+    repo = repo.expanduser().resolve()
+    manifest = _load_manifest(repo)
+    items = manifest.get("items", [])
+    pages: list[str] = []
+    errors: list[str] = []
+    public_items: list[dict[str, Any]] = []
+
+    for item in items:
+        note_rel = str(item.get("path", ""))
+        note_path = repo / note_rel
+        if not note_path.exists():
+            errors.append(f"missing note: {note_rel}")
+            continue
+        metadata = _extract_note_metadata(note_path)
+        if not metadata["has_autonomous_disclosure"]:
+            errors.append(f"missing autonomous disclosure: {note_rel}")
+        if not metadata["claim_type"]:
+            errors.append(f"missing claim type: {note_rel}")
+        if not metadata["evidence"]:
+            errors.append(f"missing evidence: {note_rel}")
+        if not metadata["has_limitations"]:
+            errors.append(f"missing limitations: {note_rel}")
+
+        html_rel = _relative_html_path(note_rel)
+        html_path = repo / html_rel
+        html_path.parent.mkdir(parents=True, exist_ok=True)
+        body = f"""<header>
+  <p class="meta"><a href="../../index.html">AxiomForge public ledger</a></p>
+</header>
+{_render_markdown_subset(metadata["text"])}
+<h2>Public Ledger Metadata</h2>
+<table class="ledger">
+  <tr><th>Claim type</th><td>{html.escape(metadata["claim_type"])}</td></tr>
+  <tr><th>Evidence path</th><td><code>{html.escape(metadata["evidence"])}</code></td></tr>
+  <tr><th>Bot authorship</th><td>AxiomForge Autonomous System</td></tr>
+  <tr><th>Correction path</th><td><a href="{CORRECTION_PATH}">{CORRECTION_PATH}</a></td></tr>
+  <tr><th>Source markdown</th><td><a href="{html.escape(note_path.name)}">{html.escape(note_path.name)}</a></td></tr>
+</table>
+"""
+        html_path.write_text(_page(metadata["title"], body))
+        pages.append(html_rel)
+        public_items.append(
+            {
+                "queue_id": item.get("queue_id"),
+                "title": metadata["title"],
+                "claim_type": metadata["claim_type"],
+                "evidence": metadata["evidence"],
+                "markdown": note_rel,
+                "html": html_rel,
+                "published_at": item.get("published_at"),
+                "correction_path": CORRECTION_PATH,
+            }
+        )
+
+    rows = "\n".join(
+        f"""<tr>
+  <td>{html.escape(str(item.get("queue_id", "")))}</td>
+  <td><a href="{html.escape(item["html"])}">{html.escape(item["title"])}</a></td>
+  <td>{html.escape(item["claim_type"])}</td>
+  <td><code>{html.escape(item["evidence"])}</code></td>
+</tr>"""
+        for item in public_items
+    )
+    publication_rows = "\n".join(
+        f"""<tr>
+  <td>{html.escape(str(item.get("queue_id", "")))}</td>
+  <td><a href="{html.escape(str(Path(item["html"]).relative_to("publications")))}">{html.escape(item["title"])}</a></td>
+  <td>{html.escape(item["claim_type"])}</td>
+  <td><code>{html.escape(item["evidence"])}</code></td>
+</tr>"""
+        for item in public_items
+    )
+    index_body = f"""<header>
+  <h1>AxiomForge Public Research Ledger</h1>
+  <p>This is an autonomous lab-note ledger generated by AxiomForge Autonomous System.</p>
+  <p class="meta">Every public item must disclose autonomous authorship, claim type, evidence, limitations, and correction path.</p>
+</header>
+<h2>Lab Notes</h2>
+<table class="ledger">
+  <tr><th>Queue</th><th>Title</th><th>Claim type</th><th>Evidence</th></tr>
+  {rows}
+</table>
+<h2>Machine-Readable Manifest</h2>
+<p><a href="site-manifest.json">site-manifest.json</a> and <a href="publications/manifest.json">publications/manifest.json</a></p>
+"""
+    publications_body = f"""<header>
+  <p class="meta"><a href="../index.html">AxiomForge public ledger</a></p>
+  <h1>AxiomForge Publications</h1>
+  <p>This index is generated by AxiomForge Autonomous System from the append-only publication manifest.</p>
+  <p class="meta">Every public item must disclose autonomous authorship, claim type, evidence, limitations, and correction path.</p>
+</header>
+<h2>Lab Notes</h2>
+<table class="ledger">
+  <tr><th>Queue</th><th>Title</th><th>Claim type</th><th>Evidence</th></tr>
+  {publication_rows}
+</table>
+<h2>Machine-Readable Manifest</h2>
+<p><a href="../site-manifest.json">site-manifest.json</a> and <a href="manifest.json">publications/manifest.json</a></p>
+"""
+    (repo / "index.html").write_text(_page("AxiomForge Public Research Ledger", index_body))
+    (repo / "publications" / "index.html").write_text(_page("AxiomForge Publications", publications_body))
+    (repo / ".nojekyll").write_text("")
+    site_manifest = {
+        "generated_by": BOT_NAME,
+        "correction_path": CORRECTION_PATH,
+        "items": public_items,
+    }
+    (repo / "site-manifest.json").write_text(json.dumps(site_manifest, indent=2, sort_keys=True) + "\n")
+    pages.extend(["index.html", "publications/index.html", "site-manifest.json", ".nojekyll"])
+    verify_errors = verify_public_site(repo)
+    errors.extend(verify_errors)
+    return SiteBuildResult("passed" if not errors else "failed", tuple(pages), tuple(errors))
+
+
+def verify_public_site(repo: Path) -> list[str]:
+    errors: list[str] = []
+    required = [repo / "index.html", repo / "site-manifest.json", repo / "publications" / "index.html"]
+    for path in required:
+        if not path.exists():
+            errors.append(f"missing generated page: {path.relative_to(repo)}")
+    for path in repo.rglob("*.html"):
+        text = path.read_text(errors="replace")
+        for phrase in ["AxiomForge Autonomous System", "Correction path"]:
+            if phrase not in text:
+                errors.append(f"missing {phrase!r}: {path.relative_to(repo)}")
+    index = repo / "index.html"
+    if index.exists():
+        text = index.read_text(errors="replace")
+        for phrase in ["claim type", "evidence", "limitations", "correction path"]:
+            if phrase.lower() not in text.lower():
+                errors.append(f"index missing {phrase}")
+    return errors
+
+
+def publish_public_site(repo: Path, *, branch: str = DEFAULT_PUBLICATION_BRANCH, push: bool = True) -> SiteBuildResult:
+    repo = repo.expanduser().resolve()
+    _prepare_branch(repo, branch)
+    result = build_public_site(repo)
+    if result.status != "passed":
+        return result
+    _run_git(repo, ["add", "index.html", "site-manifest.json", ".nojekyll", "publications"])
+    diff = _run_git(repo, ["diff", "--cached", "--quiet"], check=False)
+    if diff.returncode == 0:
+        return result
+    env = os.environ.copy()
+    env.update(
+        {
+            "GIT_AUTHOR_NAME": BOT_NAME,
+            "GIT_AUTHOR_EMAIL": BOT_EMAIL,
+            "GIT_COMMITTER_NAME": BOT_NAME,
+            "GIT_COMMITTER_EMAIL": BOT_EMAIL,
+        }
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "commit", "-m", "autonomous site: rebuild public ledger"],
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=env,
+    )
+    if push:
+        _run_git(repo, ["push", "origin", branch])
+    return result

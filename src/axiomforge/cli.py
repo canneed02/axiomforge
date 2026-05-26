@@ -12,6 +12,7 @@ from .publisher import DEFAULT_PUBLICATION_BRANCH, publish_ready_queue
 from .research import run_phase1_research_cycle
 from .review import run_review_cycle
 from .sandbox import run_code_cycle
+from .site import publish_public_site
 
 
 def default_root() -> Path:
@@ -50,6 +51,11 @@ def main() -> None:
     publisher.add_argument("--repo", type=Path, default=Path(os.getenv("AXIOMFORGE_PUBLICATION_REPO", "./publication-repo")))
     publisher.add_argument("--branch", default=os.getenv("AXIOMFORGE_PUBLICATION_BRANCH", DEFAULT_PUBLICATION_BRANCH))
     publisher.add_argument("--no-push", action="store_true")
+
+    site = subparsers.add_parser("site-build", help="Build and publish the public lab-note site.")
+    site.add_argument("--repo", type=Path, default=Path(os.getenv("AXIOMFORGE_PUBLICATION_REPO", "./publication-repo")))
+    site.add_argument("--branch", default=os.getenv("AXIOMFORGE_PUBLICATION_BRANCH", DEFAULT_PUBLICATION_BRANCH))
+    site.add_argument("--no-push", action="store_true")
 
     task = subparsers.add_parser("create-task", help="Create a research task.")
     task.add_argument("--title", required=True)
@@ -111,6 +117,13 @@ def main() -> None:
     if args.command == "publish-ready":
         results = publish_ready_queue(root, args.repo, branch=args.branch, push=not args.no_push)
         print(json.dumps([result.__dict__ for result in results], sort_keys=True))
+        return
+
+    if args.command == "site-build":
+        result = publish_public_site(args.repo, branch=args.branch, push=not args.no_push)
+        print(json.dumps(result.__dict__, sort_keys=True))
+        if result.status != "passed":
+            raise SystemExit(1)
         return
 
     if args.command == "create-task":

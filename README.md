@@ -104,8 +104,22 @@ Autonomous publication has been implemented early as supporting infrastructure:
 - publication uses the `autonomous-publications` branch
 - code runtime stays on `main`
 
-This is not the locked Phase 2. In `PLANNING.md`, publication belongs to Phase 5.
-The next implementation phase remains the sandbox code-writing agent.
+This was implemented before the locked roadmap reached Phase 5. It remains
+supporting infrastructure for the public ledger.
+
+## Phase 5
+
+Phase 5 adds the public lab-note site:
+
+- browsable `index.html`
+- per-note HTML pages
+- `site-manifest.json`
+- correction path
+- bot-authorship disclosure
+- claim type, evidence, and limitations on the public surface
+
+The site is built from the autonomous publication branch and remains separate
+from implementation code.
 
 ## Quickstart
 
@@ -123,6 +137,7 @@ axiomforge --root ./state proof-cycle --objective "maintain proof and experiment
 axiomforge --root ./state review-cycle
 axiomforge --root ./state provider-inventory
 axiomforge --root ./state publish-ready --repo ./publication-repo --branch autonomous-publications
+axiomforge site-build --repo ./publication-repo --branch autonomous-publications
 ```
 
 ## Core Rule

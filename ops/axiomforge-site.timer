@@ -1,0 +1,11 @@
+[Unit]
+Description=Run AxiomForge Phase 5 public lab-note site builder
+
+[Timer]
+OnBootSec=19min
+OnUnitActiveSec=1h
+RandomizedDelaySec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
