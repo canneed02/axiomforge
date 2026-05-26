@@ -849,7 +849,22 @@
       "queue_id": 62,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-224549-544890-phase-3-proof-experiment-cycle.md",
       "title": "Phase 3 Proof Experiment Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000063-2026-05-26-224754-329297-phase-2-sandbox-code-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=66; code_run_id=13; summary=/root/axiomforge-state/artifacts/code-runs/2026-05-26T224751.285849Z0000-maintain-sandbox-code-writing-capability/summary.json; diff=/root/axiomforge-state/artifacts/code-runs/2026-05-26T224751.285849Z0000-maintain-sandbox-code-writing-capability/diff.patch; logs=/root/axiomforge-state/artifacts/code-runs/2026-05-26T224751.285849Z0000-maintain-sandbox-code-writing-capability/commands.json",
+        "review_required_before_claiming_science": true,
+        "secret_scan_passed": true,
+        "tests_passed": true
+      },
+      "published_at": "2026-05-26T23:11:21.361510+00:00",
+      "queue_id": 63,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-224754-329297-phase-2-sandbox-code-cycle.md",
+      "title": "Phase 2 Sandbox Code Cycle"
     }
   ],
-  "updated_at": "2026-05-26T23:11:19.692385+00:00"
+  "updated_at": "2026-05-26T23:11:21.361370+00:00"
 }
