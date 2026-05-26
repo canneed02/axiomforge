@@ -1,0 +1,4 @@
+ba57f5268332eba3ec823071101ea28ac62d7b5f285925348cfd2eb0132d759a  release-candidates/v2026.05.26.054426.861148/release-manifest.json
+a3d6beeb39a9a9bcdc732d13f9659fe2bb3be997f0f597db4cf31503e9b6f713  release-candidates/v2026.05.26.054426.861148/axiomforge-public-ledger-v2026.05.26.054426.861148.tar.gz
+7852053d0d03cf6a220795b74b1f1be0ebbd2112998978cfffed2b68ef02dd80  site-manifest.json
+1b524d222bf4053a32af8ecd2c2d81571707329ac3e173603c428cce0a98cd64  publications/manifest.json
