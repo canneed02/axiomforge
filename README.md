@@ -142,6 +142,26 @@ Phase 6 adds automatic release artifacts:
 The release candidate packages public ledger artifacts. It does not claim final
 scientific discovery.
 
+## Phase 7
+
+Phase 7 adds the paper engine and DOI/arXiv-ready package pipeline:
+
+- generated `paper.md`
+- generated `paper.tex`
+- bibliography metadata
+- DOI metadata draft
+- arXiv submission notes
+- reproducibility appendix
+- submission checklist
+- checksums
+- paper package tarball
+- bot-authored commit and annotated tag
+- gate using passed release, public site, skeptic review, replication, and
+  evidence manifests
+
+The paper engine prepares packages only. It does not submit to arXiv or DOI
+providers under a human identity.
+
 ## Quickstart
 
 ```bash
@@ -160,6 +180,7 @@ axiomforge --root ./state provider-inventory
 axiomforge --root ./state publish-ready --repo ./publication-repo --branch autonomous-publications
 axiomforge site-build --repo ./publication-repo --branch autonomous-publications
 axiomforge --root ./state release-cycle --repo ./publication-repo --branch autonomous-publications
+axiomforge --root ./state paper-cycle --repo ./publication-repo --branch autonomous-publications
 ```
 
 ## Core Rule

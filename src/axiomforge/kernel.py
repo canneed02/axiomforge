@@ -175,6 +175,13 @@ def initialize(root: Path) -> ForgePaths:
                 status TEXT NOT NULL,
                 release_json TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS paper_runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                version TEXT NOT NULL,
+                status TEXT NOT NULL,
+                paper_json TEXT NOT NULL
+            );
             """
         )
         db.execute(
@@ -481,6 +488,50 @@ def register_release_run(
     return run_id
 
 
+def latest_release_run(p: ForgePaths, status: str | None = None) -> dict[str, Any] | None:
+    query = """
+        SELECT id, ts, version, status, release_json
+        FROM release_runs
+    """
+    params: tuple[Any, ...] = ()
+    if status is not None:
+        query += " WHERE status = ?"
+        params = (status,)
+    query += " ORDER BY id DESC LIMIT 1"
+    with db_session(p) as db:
+        row = db.execute(query, params).fetchone()
+    if not row:
+        return None
+    return {
+        "id": int(row[0]),
+        "ts": str(row[1]),
+        "version": str(row[2]),
+        "status": str(row[3]),
+        "payload": json.loads(str(row[4])),
+    }
+
+
+def register_paper_run(
+    p: ForgePaths,
+    *,
+    version: str,
+    status: str,
+    paper: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    with db_session(p) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO paper_runs (ts, version, status, paper_json)
+            VALUES (?, ?, ?, ?)
+            """,
+            (ts, version, status, json.dumps(paper, sort_keys=True)),
+        )
+        run_id = int(cursor.lastrowid)
+    append_event(p, "paper_run.registered", {"id": run_id, "version": version, "status": status})
+    return run_id
+
+
 def queued_publications(p: ForgePaths, status: str = "ready") -> list[PublicationQueueItem]:
     with db_session(p) as db:
         rows = db.execute(
@@ -573,6 +624,7 @@ def counts(p: ForgePaths) -> dict[str, int]:
                 "review_runs",
                 "replication_runs",
                 "release_runs",
+                "paper_runs",
             ]
         }
 

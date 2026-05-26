@@ -14,3 +14,7 @@ Phase 7: paper engine and DOI/arXiv-ready pipeline
 The autonomous publisher already exists as an early supporting capability, but
 it does not redefine the roadmap. Publication belongs to Phase 5 in the locked
 plan.
+
+Phase 7 implementation notes are in
+[`phase7_paper_engine.md`](phase7_paper_engine.md). `PLANNING.md` remains the
+authoritative roadmap record.

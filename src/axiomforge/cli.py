@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 from .kernel import counts, create_task, initialize, publish_lab_note, register_artifact, run_bootstrap_cycle
+from .paper import build_paper_package
 from .providers import nvidia_inventory_from_env
 from .proof import run_proof_cycle
 from .publisher import DEFAULT_PUBLICATION_BRANCH, publish_ready_queue
@@ -62,6 +63,11 @@ def main() -> None:
     release.add_argument("--repo", type=Path, default=Path(os.getenv("AXIOMFORGE_PUBLICATION_REPO", "./publication-repo")))
     release.add_argument("--branch", default=os.getenv("AXIOMFORGE_PUBLICATION_BRANCH", DEFAULT_PUBLICATION_BRANCH))
     release.add_argument("--no-push", action="store_true")
+
+    paper = subparsers.add_parser("paper-cycle", help="Build and tag a Phase 7 DOI/arXiv-ready paper package.")
+    paper.add_argument("--repo", type=Path, default=Path(os.getenv("AXIOMFORGE_PUBLICATION_REPO", "./publication-repo")))
+    paper.add_argument("--branch", default=os.getenv("AXIOMFORGE_PUBLICATION_BRANCH", DEFAULT_PUBLICATION_BRANCH))
+    paper.add_argument("--no-push", action="store_true")
 
     task = subparsers.add_parser("create-task", help="Create a research task.")
     task.add_argument("--title", required=True)
@@ -134,6 +140,13 @@ def main() -> None:
 
     if args.command == "release-cycle":
         result = build_release_candidate(root, args.repo, branch=args.branch, push=not args.no_push)
+        print(json.dumps(result.__dict__, sort_keys=True))
+        if result.status != "passed":
+            raise SystemExit(1)
+        return
+
+    if args.command == "paper-cycle":
+        result = build_paper_package(root, args.repo, branch=args.branch, push=not args.no_push)
         print(json.dumps(result.__dict__, sort_keys=True))
         if result.status != "passed":
             raise SystemExit(1)
