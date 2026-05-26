@@ -149,7 +149,26 @@ Phase 0 is not allowed to:
 - create external releases
 - claim it solved an open problem
 
-## First Serious Target After Phase 0
+## Phase 1 Definition
+
+Phase 1 is complete when AxiomForge can:
+
+- read provider configuration without exposing secrets
+- run a bounded autonomous research cycle
+- create proposal and verifier artifacts
+- classify the selected research program
+- publish a measured local lab note
+- enqueue the note for GitHub publication
+- run unattended through systemd
+
+Phase 1 is not allowed to:
+
+- push unreviewed claims directly to a public branch
+- spend unbounded provider quota
+- treat model output as proof
+- publish secrets, private prompts, or raw credentials
+
+## First Serious Target After Phase 1
 
 Build the autonomous code-writing harness:
 
@@ -165,4 +184,3 @@ No code-writing autonomy should run without:
 - tests
 - diff summary
 - rollback path
-

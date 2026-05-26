@@ -18,6 +18,7 @@ fi
 if grep -R -E '(n[v]api-|s[k]-[A-Za-z0-9]{20,})' \
   --exclude-dir=.git \
   --exclude-dir=.venv \
+  --exclude-dir=__pycache__ \
   --exclude-dir=state \
   . >/dev/null; then
   echo "secret scan failed" >&2
@@ -25,4 +26,3 @@ if grep -R -E '(n[v]api-|s[k]-[A-Za-z0-9]{20,})' \
 fi
 
 echo "ci_hygiene=ok"
-

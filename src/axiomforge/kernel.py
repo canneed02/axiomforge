@@ -97,6 +97,24 @@ def initialize(root: Path) -> ForgePaths:
                 path TEXT NOT NULL,
                 evidence TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS research_runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                goal TEXT NOT NULL,
+                program TEXT NOT NULL,
+                status TEXT NOT NULL,
+                proposal_json TEXT NOT NULL,
+                verifier_json TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS publication_queue (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                title TEXT NOT NULL,
+                path TEXT NOT NULL,
+                target TEXT NOT NULL,
+                status TEXT NOT NULL,
+                policy_json TEXT NOT NULL
+            );
             """
         )
         db.execute(
@@ -168,6 +186,64 @@ def register_artifact(p: ForgePaths, path: Path, kind: str, description: str) ->
     return artifact_id
 
 
+def register_research_run(
+    p: ForgePaths,
+    *,
+    goal: str,
+    program: str,
+    status: str,
+    proposal: dict[str, Any],
+    verifier: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    with sqlite3.connect(p.db) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO research_runs (ts, goal, program, status, proposal_json, verifier_json)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                ts,
+                goal,
+                program,
+                status,
+                json.dumps(proposal, sort_keys=True),
+                json.dumps(verifier, sort_keys=True),
+            ),
+        )
+        run_id = int(cursor.lastrowid)
+    append_event(p, "research_run.registered", {"id": run_id, "goal": goal, "program": program, "status": status})
+    return run_id
+
+
+def enqueue_publication(
+    p: ForgePaths,
+    *,
+    title: str,
+    path: Path,
+    target: str,
+    status: str,
+    policy: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    publication_path = str(path)
+    with sqlite3.connect(p.db) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO publication_queue (ts, title, path, target, status, policy_json)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (ts, title, publication_path, target, status, json.dumps(policy, sort_keys=True)),
+        )
+        queue_id = int(cursor.lastrowid)
+    append_event(
+        p,
+        "publication.queued",
+        {"id": queue_id, "title": title, "path": publication_path, "target": target, "status": status},
+    )
+    return queue_id
+
+
 def publish_lab_note(p: ForgePaths, *, title: str, claim_type: str, body: str, evidence: str) -> Path:
     gate = validate_lab_note(title=title, claim_type=claim_type, body=body, evidence=evidence)
     if not gate.ok:
@@ -206,7 +282,15 @@ def counts(p: ForgePaths) -> dict[str, int]:
     with sqlite3.connect(p.db) as db:
         return {
             table: int(db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0])
-            for table in ["events", "tasks", "claims", "artifacts", "publications"]
+            for table in [
+                "events",
+                "tasks",
+                "claims",
+                "artifacts",
+                "publications",
+                "research_runs",
+                "publication_queue",
+            ]
         }
 
 

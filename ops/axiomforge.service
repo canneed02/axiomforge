@@ -7,11 +7,11 @@ After=network-online.target
 Type=oneshot
 WorkingDirectory=/root/axiomforge
 Environment=AXIOMFORGE_ROOT=/root/axiomforge-state
-ExecStart=/root/axiomforge/.venv/bin/axiomforge --root /root/axiomforge-state cycle --goal "maintain autonomous research memory"
+EnvironmentFile=-/root/axiomforge-state/secrets.env
+ExecStart=/root/axiomforge/.venv/bin/axiomforge --root /root/axiomforge-state research-cycle --goal "maintain autonomous research memory"
 Nice=10
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7
 
 [Install]
 WantedBy=multi-user.target
-

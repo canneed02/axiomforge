@@ -5,7 +5,9 @@ import json
 import os
 from pathlib import Path
 
-from .kernel import counts, create_task, initialize, paths, publish_lab_note, register_artifact, run_bootstrap_cycle
+from .kernel import counts, create_task, initialize, publish_lab_note, register_artifact, run_bootstrap_cycle
+from .providers import nvidia_inventory_from_env
+from .research import run_phase1_research_cycle
 
 
 def default_root() -> Path:
@@ -23,6 +25,11 @@ def main() -> None:
 
     cycle = subparsers.add_parser("cycle", help="Run one Phase 0 bootstrap cycle.")
     cycle.add_argument("--goal", required=True)
+
+    research_cycle = subparsers.add_parser("research-cycle", help="Run one Phase 1 autonomous research cycle.")
+    research_cycle.add_argument("--goal", required=True)
+
+    subparsers.add_parser("provider-inventory", help="Print redacted provider inventory.")
 
     task = subparsers.add_parser("create-task", help="Create a research task.")
     task.add_argument("--title", required=True)
@@ -55,6 +62,15 @@ def main() -> None:
     if args.command == "cycle":
         out = run_bootstrap_cycle(root, args.goal)
         print(f"lab_note={out}")
+        return
+
+    if args.command == "research-cycle":
+        out = run_phase1_research_cycle(root, args.goal)
+        print(f"lab_note={out}")
+        return
+
+    if args.command == "provider-inventory":
+        print(json.dumps(nvidia_inventory_from_env().public_dict(), sort_keys=True))
         return
 
     if args.command == "create-task":

@@ -6,6 +6,8 @@ from unittest import mock
 from axiomforge.cli import main
 from axiomforge.kernel import counts, create_task, initialize, publish_lab_note, run_bootstrap_cycle
 from axiomforge.policy import validate_lab_note
+from axiomforge.providers import nvidia_inventory_from_env
+from axiomforge.research import run_phase1_research_cycle
 
 
 class AxiomForgeTest(unittest.TestCase):
@@ -85,6 +87,33 @@ class AxiomForgeTest(unittest.TestCase):
             self.assertEqual(counts(paths)["tasks"], 1)
             self.assertEqual(counts(paths)["claims"], 1)
             self.assertEqual(counts(paths)["publications"], 1)
+
+    def test_provider_inventory_redacts_keys(self):
+        env = {
+            "AXIOMFORGE_PROVIDER_MODE": "nvidia",
+            "NVIDIA_API_KEY_1": "test-provider-secret",
+            "AXIOMFORGE_NVIDIA_MODELS": "model-a,model-b",
+        }
+        with mock.patch.dict("os.environ", env, clear=True):
+            inventory = nvidia_inventory_from_env().public_dict()
+
+        self.assertTrue(inventory["enabled"])
+        self.assertEqual(inventory["key_count"], 1)
+        self.assertEqual(inventory["models"], ["model-a", "model-b"])
+        self.assertNotIn("test-provider-secret", str(inventory))
+
+    def test_phase1_research_cycle_queues_publication(self):
+        env = {"AXIOMFORGE_PROVIDER_MODE": "offline"}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict("os.environ", env, clear=True):
+            out = run_phase1_research_cycle(Path(tmp), "test autonomous science methodology")
+            paths = initialize(Path(tmp))
+
+            self.assertTrue(out.exists())
+            registry_counts = counts(paths)
+            self.assertEqual(registry_counts["research_runs"], 1)
+            self.assertEqual(registry_counts["publication_queue"], 1)
+            self.assertEqual(registry_counts["publications"], 1)
+            self.assertIn("Publication Queue", out.read_text())
 
     def test_cli_init(self):
         with tempfile.TemporaryDirectory() as tmp:
