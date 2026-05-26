@@ -8,7 +8,7 @@ This file exists only as a compatibility entry point for readers who start from
 Current locked next phase:
 
 ```text
-Phase 5: public lab-note site or output stream
+Phase 6: automatic release artifacts
 ```
 
 The autonomous publisher already exists as an early supporting capability, but

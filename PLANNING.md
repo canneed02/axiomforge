@@ -366,6 +366,12 @@ Completed:
 - `axiomforge-review.timer` runs the reviewer and replicator gate
 - server smoke review-cycle passed with gate `passed`, review `passed`, and
   replication `passed`
+- Phase 5 public lab-note site exists and is deployed on the server
+- site-build creates `index.html`, per-note HTML pages, `.nojekyll`, and
+  `site-manifest.json` on the autonomous publication branch
+- `axiomforge-site.timer` runs the public site builder
+- GitHub Pages is configured from `autonomous-publications` branch root
+- server smoke site-build passed local verification before push
 
 Important correction:
 
@@ -467,20 +473,21 @@ Phase 4 is not allowed to:
 - overwrite raw evidence from the original run
 - treat model-generated review text as proof
 
-## Next Phase
+## Phase 5 Completion
 
-The next phase is Phase 5: public lab-note site or output stream.
+Phase 5 is complete.
 
 Phase 5 success criteria:
 
-- publish a browsable public index of autonomous lab notes
-- expose manifest metadata for every public artifact
+- publish a browsable public index of autonomous lab notes: complete
+- expose manifest metadata for every public artifact: complete
 - include bot-authorship disclosure, claim type, evidence path, limitations, and
-  correction path on the public surface
-- make publication history append-only from the public reader perspective
-- keep implementation code separate from public artifacts
-- verify generated public pages locally before push
-- keep publication compatible with GitHub Pages or a static host
+  correction path on the public surface: complete
+- make publication history append-only from the public reader perspective:
+  complete
+- keep implementation code separate from public artifacts: complete
+- verify generated public pages locally before push: complete
+- keep publication compatible with GitHub Pages or a static host: complete
 
 Phase 5 is not allowed to:
 
@@ -489,3 +496,31 @@ Phase 5 is not allowed to:
 - expose runtime secrets or private environment configuration
 - present autonomous output as human-authored work
 - turn the public site into marketing instead of a scientific ledger
+
+Public site:
+
+```text
+https://canneed02.github.io/axiomforge/
+```
+
+## Next Phase
+
+The next phase is Phase 6: automatic release artifacts.
+
+Phase 6 success criteria:
+
+- create release candidate packages from gated public artifacts
+- include checksums, manifest, raw evidence references, and generated site URL
+- tag release candidates under bot identity
+- create GitHub releases only when policy, site, skeptic, and replicator gates
+  pass
+- keep release artifacts immutable after publication
+- block release creation for missing evidence, failed replication, or failed
+  site verification
+
+Phase 6 is not allowed to:
+
+- release artifacts that did not pass policy gates
+- overwrite or mutate published release assets silently
+- tag arbitrary commits without artifact manifest evidence
+- claim final scientific discovery from infrastructure validation alone

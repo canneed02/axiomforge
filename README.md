@@ -18,7 +18,7 @@ If another document disagrees with `PLANNING.md`, `PLANNING.md` wins.
 Current next phase:
 
 ```text
-Phase 5: public lab-note site or output stream
+Phase 6: automatic release artifacts
 ```
 
 ## Phase 0
@@ -120,6 +120,12 @@ Phase 5 adds the public lab-note site:
 
 The site is built from the autonomous publication branch and remains separate
 from implementation code.
+
+Public site:
+
+```text
+https://canneed02.github.io/axiomforge/
+```
 
 ## Quickstart
 
