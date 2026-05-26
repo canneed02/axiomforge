@@ -8,7 +8,7 @@ This file exists only as a compatibility entry point for readers who start from
 Current locked next phase:
 
 ```text
-Phase 4: reviewer and replicator multi-agent gate
+Phase 5: public lab-note site or output stream
 ```
 
 The autonomous publisher already exists as an early supporting capability, but

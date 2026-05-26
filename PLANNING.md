@@ -360,6 +360,12 @@ Completed:
 - `axiomforge-proof.timer` runs the proof and experiment harness
 - server smoke proof-cycle passed with verifier status `verified`, symbolic
   status `proved`, and empirical status `replicated`
+- Phase 4 reviewer and replicator gate exists and is deployed on the server
+- review-cycle artifacts include skeptic review, clean replication report,
+  gate decision, and manifest hashes
+- `axiomforge-review.timer` runs the reviewer and replicator gate
+- server smoke review-cycle passed with gate `passed`, review `passed`, and
+  replication `passed`
 
 Important correction:
 
@@ -434,23 +440,24 @@ Phase 3 is not allowed to:
 - run unbounded solver or experiment jobs
 - publish proof/experiment claims without a verifier artifact
 
-## Next Phase
+## Phase 4 Completion
 
-The next phase is Phase 4: reviewer and replicator multi-agent gate.
+Phase 4 is complete.
 
 Phase 4 success criteria:
 
-- create reviewer and replication run registries
+- create reviewer and replication run registries: complete
 - Skeptic Agent reads claims, evidence, raw logs, verifier artifacts, and
-  publication policy before public eligibility
-- Replicator Agent reruns proof/code/experiment artifacts from a clean workspace
-- reviewer output includes objections, severity, and required fixes
+  publication policy before public eligibility: complete
+- Replicator Agent reruns proof/code/experiment artifacts from a clean workspace:
+  complete for proof/experiment artifacts
+- reviewer output includes objections, severity, and required fixes: complete
 - replication output includes commands, hashes, pass/fail status, and
-  environment details
+  environment details: complete
 - publication queue only receives `ready` status when policy, skeptic, and
-  replicator gates pass
+  replicator gates pass: complete
 - failed review or replication creates follow-up tasks rather than hiding the
-  failure
+  failure: complete
 
 Phase 4 is not allowed to:
 
@@ -459,3 +466,26 @@ Phase 4 is not allowed to:
 - suppress reviewer objections
 - overwrite raw evidence from the original run
 - treat model-generated review text as proof
+
+## Next Phase
+
+The next phase is Phase 5: public lab-note site or output stream.
+
+Phase 5 success criteria:
+
+- publish a browsable public index of autonomous lab notes
+- expose manifest metadata for every public artifact
+- include bot-authorship disclosure, claim type, evidence path, limitations, and
+  correction path on the public surface
+- make publication history append-only from the public reader perspective
+- keep implementation code separate from public artifacts
+- verify generated public pages locally before push
+- keep publication compatible with GitHub Pages or a static host
+
+Phase 5 is not allowed to:
+
+- hide or rewrite public lab notes silently
+- publish artifacts that lack claim type, evidence, or limitations
+- expose runtime secrets or private environment configuration
+- present autonomous output as human-authored work
+- turn the public site into marketing instead of a scientific ledger

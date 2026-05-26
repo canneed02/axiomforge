@@ -18,7 +18,7 @@ If another document disagrees with `PLANNING.md`, `PLANNING.md` wins.
 Current next phase:
 
 ```text
-Phase 4: reviewer and replicator multi-agent gate
+Phase 5: public lab-note site or output stream
 ```
 
 ## Phase 0
