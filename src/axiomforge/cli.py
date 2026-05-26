@@ -9,6 +9,7 @@ from .kernel import counts, create_task, initialize, publish_lab_note, register_
 from .providers import nvidia_inventory_from_env
 from .publisher import DEFAULT_PUBLICATION_BRANCH, publish_ready_queue
 from .research import run_phase1_research_cycle
+from .sandbox import run_code_cycle
 
 
 def default_root() -> Path:
@@ -29,6 +30,10 @@ def main() -> None:
 
     research_cycle = subparsers.add_parser("research-cycle", help="Run one Phase 1 autonomous research cycle.")
     research_cycle.add_argument("--goal", required=True)
+
+    code_cycle = subparsers.add_parser("code-cycle", help="Run one Phase 2 sandbox code-writing cycle.")
+    code_cycle.add_argument("--objective", required=True)
+    code_cycle.add_argument("--timeout-seconds", type=int, default=30)
 
     subparsers.add_parser("provider-inventory", help="Print redacted provider inventory.")
 
@@ -72,6 +77,11 @@ def main() -> None:
 
     if args.command == "research-cycle":
         out = run_phase1_research_cycle(root, args.goal)
+        print(f"lab_note={out}")
+        return
+
+    if args.command == "code-cycle":
+        out = run_code_cycle(root, args.objective, timeout_seconds=args.timeout_seconds)
         print(f"lab_note={out}")
         return
 

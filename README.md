@@ -52,6 +52,20 @@ Phase 1 turns the heartbeat into a bounded autonomous research cycle:
 The system can use provider keys without writing secrets to public artifacts.
 External model output is treated as proposal material, not proof.
 
+## Phase 2
+
+Phase 2 adds the sandbox code-writing agent:
+
+- isolated code-run workspaces
+- scoped file writes
+- command allowlist
+- hard timeouts
+- tests and compile checks
+- secret scan before publication eligibility
+- machine-readable diff, logs, summary, and manifest artifacts
+
+The agent can create code artifacts without writing directly to `main`.
+
 ## Early Publication Capability
 
 Autonomous publication has been implemented early as supporting infrastructure:
@@ -76,6 +90,7 @@ axiomforge --root ./state init
 axiomforge --root ./state status
 axiomforge --root ./state cycle --goal "bootstrap autonomous research memory"
 axiomforge --root ./state research-cycle --goal "maintain autonomous research memory"
+axiomforge --root ./state code-cycle --objective "maintain sandbox code-writing capability"
 axiomforge --root ./state provider-inventory
 axiomforge --root ./state publish-ready --repo ./publication-repo --branch autonomous-publications
 ```

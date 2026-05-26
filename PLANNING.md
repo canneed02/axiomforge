@@ -348,6 +348,9 @@ Completed:
 - hourly research cycle timer is active
 - autonomous publication branch exists
 - publisher timer exists and publishes queued lab notes under bot identity
+- Phase 2 sandbox code-writing agent exists locally in implementation form
+- code-cycle artifacts include workspace, diff, command logs, summary, and
+  manifest
 
 Important correction:
 
@@ -358,6 +361,12 @@ as completion of Phase 2.
 ## Next Phase
 
 The next phase is Phase 2: sandbox code-writing agent.
+
+Implementation status:
+
+Phase 2 is being implemented. It is not complete until the server code timer is
+deployed, a smoke code-cycle passes on the server, and the public repository CI
+passes for the implementation.
 
 Phase 2 success criteria:
 

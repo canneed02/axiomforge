@@ -1,0 +1,17 @@
+[Unit]
+Description=AxiomForge Phase 2 sandbox code-writing agent
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/axiomforge
+Environment=AXIOMFORGE_ROOT=/root/axiomforge-state
+EnvironmentFile=-/root/axiomforge-state/secrets.env
+ExecStart=/root/axiomforge/.venv/bin/axiomforge --root /root/axiomforge-state code-cycle --objective "maintain sandbox code-writing capability" --timeout-seconds 45
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+[Install]
+WantedBy=multi-user.target

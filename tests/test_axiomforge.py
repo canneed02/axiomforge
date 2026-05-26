@@ -18,6 +18,7 @@ from axiomforge.policy import validate_lab_note
 from axiomforge.providers import nvidia_inventory_from_env
 from axiomforge.publisher import publish_ready_queue
 from axiomforge.research import run_phase1_research_cycle
+from axiomforge.sandbox import _safe_identifier, run_code_cycle, run_command, scan_for_secrets, validate_command
 
 
 class AxiomForgeTest(unittest.TestCase):
@@ -182,6 +183,47 @@ class AxiomForgeTest(unittest.TestCase):
             ).stdout.splitlines()
             self.assertNotIn("README.md", tree)
             self.assertTrue(all(path.startswith("publications/") for path in tree))
+
+    def test_phase2_code_cycle_creates_gated_artifacts(self):
+        env = {"AXIOMFORGE_PROVIDER_MODE": "offline"}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict("os.environ", env, clear=True):
+            out = run_code_cycle(Path(tmp), "create a bounded sandbox artifact", timeout_seconds=10)
+            paths = initialize(Path(tmp))
+
+            self.assertTrue(out.exists())
+            registry_counts = counts(paths)
+            self.assertEqual(registry_counts["code_runs"], 1)
+            self.assertEqual(registry_counts["publication_queue"], 1)
+            self.assertEqual(registry_counts["publications"], 1)
+            self.assertIn("Phase 2 sandbox code-writing attempt", out.read_text())
+            self.assertTrue(list((Path(tmp) / "artifacts" / "code-runs").glob("*/summary.json")))
+            self.assertTrue(list((Path(tmp) / "artifacts" / "code-runs").glob("*/diff.patch")))
+
+    def test_phase2_rejects_non_allowlisted_commands(self):
+        with self.assertRaises(ValueError):
+            validate_command(["rm", "-rf", "/tmp/example"])
+
+        with self.assertRaises(ValueError):
+            validate_command(["python3", "-c", "print('unsafe')"])
+
+    def test_phase2_command_timeout_is_captured(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = run_command(Path(tmp), ["python3", "-m", "unittest", "discover"], timeout_seconds=1)
+
+            self.assertFalse(result.timed_out)
+            self.assertIsInstance(result.exit_code, int)
+
+    def test_phase2_secret_scan_detects_provider_tokens(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "artifact.txt").write_text("prefix " + "nv" + "api-" + "secret")
+
+            self.assertEqual(scan_for_secrets(root), ["artifact.txt"])
+
+    def test_phase2_sanitizes_provider_identifiers(self):
+        self.assertEqual(_safe_identifier("123 bad-name", "fallback_name"), "fallback_name")
+        self.assertEqual(_safe_identifier("class", "fallback_name"), "fallback_name")
+        self.assertEqual(_safe_identifier("Good_Name", "fallback_name"), "good_name")
 
     def test_cli_init(self):
         with tempfile.TemporaryDirectory() as tmp:
