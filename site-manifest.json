@@ -361,6 +361,16 @@
       "published_at": "2026-05-26T12:23:32.511641+00:00",
       "queue_id": 38,
       "title": "Phase 3 Proof Experiment Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=43; review_id=8; replication_id=8; review=/root/axiomforge-state/artifacts/review-runs/2026-05-26T122914.512908Z0000-proof-run-8/skeptic_review.json; replication=/root/axiomforge-state/artifacts/review-runs/2026-05-26T122914.512908Z0000-proof-run-8/replication.json; gate=/root/axiomforge-state/artifacts/review-runs/2026-05-26T122914.512908Z0000-proof-run-8/gate.json",
+      "html": "publications/lab-notes/queue-000040-2026-05-26-122914-885088-phase-4-review-replication-cycle.html",
+      "markdown": "publications/lab-notes/queue-000040-2026-05-26-122914-885088-phase-4-review-replication-cycle.md",
+      "published_at": "2026-05-26T13:30:27.869206+00:00",
+      "queue_id": 40,
+      "title": "Phase 4 Review Replication Cycle"
     }
   ]
 }
