@@ -131,6 +131,24 @@ class AxiomForgeTest(unittest.TestCase):
             repo = Path(tmp) / "repo"
             repo.mkdir()
             subprocess.run(["git", "-C", str(repo), "init"], check=True, stdout=subprocess.PIPE)
+            (repo / "README.md").write_text("runtime code should not be published\n")
+            subprocess.run(["git", "-C", str(repo), "add", "README.md"], check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(repo),
+                    "-c",
+                    "user.name=Test",
+                    "-c",
+                    "user.email=test@example.com",
+                    "commit",
+                    "-m",
+                    "runtime branch",
+                ],
+                check=True,
+                stdout=subprocess.PIPE,
+            )
             paths = initialize(root)
             note = publish_lab_note(
                 paths,
@@ -156,6 +174,14 @@ class AxiomForgeTest(unittest.TestCase):
             self.assertEqual(len(queued_publications(paths, status="published")), 1)
             self.assertTrue((repo / "publications" / "manifest.json").exists())
             self.assertTrue(list((repo / "publications" / "lab-notes").glob("queue-*.md")))
+            tree = subprocess.run(
+                ["git", "-C", str(repo), "ls-tree", "-r", "--name-only", "HEAD"],
+                check=True,
+                text=True,
+                stdout=subprocess.PIPE,
+            ).stdout.splitlines()
+            self.assertNotIn("README.md", tree)
+            self.assertTrue(all(path.startswith("publications/") for path in tree))
 
     def test_cli_init(self):
         with tempfile.TemporaryDirectory() as tmp:

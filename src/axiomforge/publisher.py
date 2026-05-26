@@ -69,6 +69,7 @@ def _prepare_publication_branch(repo: Path, branch: str) -> None:
     orphan = _run_git(repo, ["checkout", "--orphan", branch], check=False)
     if orphan.returncode != 0:
         raise ValueError(orphan.stderr.strip() or f"failed to create branch {branch}")
+    _run_git(repo, ["rm", "-r", "--cached", "."], check=False)
     for child in repo.iterdir():
         if child.name != ".git":
             if child.is_dir():
