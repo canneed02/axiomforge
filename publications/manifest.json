@@ -26,7 +26,20 @@
       "queue_id": 2,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-004627-371481-phase-1-research-cycle.md",
       "title": "Phase 1 Research Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000003-2026-05-26-005624-839483-phase-1-research-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=6; run_id=3; proposal=/root/axiomforge-state/artifacts/research-runs/2026-05-26T005616.209141Z0000-maintain-autonomous-research-memory/proposal.json; verifier=/root/axiomforge-state/artifacts/research-runs/2026-05-26T005616.209141Z0000-maintain-autonomous-research-memory/verifier.json",
+        "verifier_passed": true
+      },
+      "published_at": "2026-05-26T00:56:27.548217+00:00",
+      "queue_id": 3,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-26-005624-839483-phase-1-research-cycle.md",
+      "title": "Phase 1 Research Cycle"
     }
   ],
-  "updated_at": "2026-05-26T00:54:12.944755+00:00"
+  "updated_at": "2026-05-26T00:56:27.548030+00:00"
 }
