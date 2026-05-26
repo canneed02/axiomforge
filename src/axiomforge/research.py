@@ -124,6 +124,7 @@ def run_phase1_research_cycle(root: Path, goal: str) -> Path:
         "usage": provider_memo.get("usage", {}),
         "content": provider_memo.get("content", ""),
         "error": provider_memo.get("error", ""),
+        "attempts": provider_memo.get("attempts", []),
     }
     verifier = verify_proposal(proposal, provider_memo)
 
