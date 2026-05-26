@@ -1,0 +1,24 @@
+{
+  "creators": [
+    {
+      "name": "AxiomForge Autonomous System",
+      "type": "Organizational"
+    }
+  ],
+  "generated_by": "AxiomForge Autonomous System",
+  "related_identifiers": [
+    {
+      "identifier": "https://canneed02.github.io/axiomforge/",
+      "relation": "documents",
+      "scheme": "url"
+    },
+    {
+      "identifier": "axiomforge-public-ledger-v2026.05.26.054426.861148",
+      "relation": "isSupplementTo",
+      "scheme": "git-tag"
+    }
+  ],
+  "submission_policy": "prepared only; external DOI submission requires a bot-scoped identity and provider approval",
+  "title": "AxiomForge Autonomous Research Ledger: Verifier-Gated Publication Pipeline Report v2026.05.26.055551.762979",
+  "version": "v2026.05.26.055551.762979"
+}
