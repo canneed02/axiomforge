@@ -348,9 +348,12 @@ Completed:
 - hourly research cycle timer is active
 - autonomous publication branch exists
 - publisher timer exists and publishes queued lab notes under bot identity
-- Phase 2 sandbox code-writing agent exists locally in implementation form
+- Phase 2 sandbox code-writing agent exists and is deployed on the server
 - code-cycle artifacts include workspace, diff, command logs, summary, and
   manifest
+- `axiomforge-code.timer` runs the sandbox code-writing agent
+- server smoke code-cycle passed with tests, diff artifact, command logs, and
+  clean secret scan
 
 Important correction:
 
@@ -358,26 +361,20 @@ The autonomous publisher was implemented early. It is useful infrastructure, but
 it does not redefine the roadmap. It counts as an early Phase 5 capability, not
 as completion of Phase 2.
 
-## Next Phase
+## Phase 2 Completion
 
-The next phase is Phase 2: sandbox code-writing agent.
-
-Implementation status:
-
-Phase 2 is being implemented. It is not complete until the server code timer is
-deployed, a smoke code-cycle passes on the server, and the public repository CI
-passes for the implementation.
+Phase 2 is complete.
 
 Phase 2 success criteria:
 
-- create isolated workspaces for agent-written code
-- enforce hard timeout, file scope, and command allowlist
-- run tests before any output is eligible for publication
-- run secret scan before any artifact is registered
-- generate a machine-readable diff summary
-- store stdout, stderr, exit codes, hashes, and commands as artifacts
-- register code attempts as tasks and claims
-- block publishing if tests, secret scan, or policy gates fail
+- create isolated workspaces for agent-written code: complete
+- enforce hard timeout, file scope, and command allowlist: complete
+- run tests before any output is eligible for publication: complete
+- run secret scan before any artifact is registered: complete
+- generate a machine-readable diff summary: complete
+- store stdout, stderr, exit codes, hashes, and commands as artifacts: complete
+- register code attempts as tasks and claims: complete
+- block publishing if tests, secret scan, or policy gates fail: complete
 
 Phase 2 is not allowed to:
 
@@ -400,3 +397,28 @@ objective
   -> local lab note
   -> publication queue only if gates pass
 ```
+
+## Next Phase
+
+The next phase is Phase 3: proof and experiment harness.
+
+Phase 3 success criteria:
+
+- create a proof/experiment run registry
+- support at least one symbolic harness, initially Z3 or SymPy
+- support at least one empirical experiment harness with deterministic seeds
+- store raw stdout, stderr, commands, versions, inputs, outputs, and hashes
+- generate verifier artifacts that distinguish proof, counterexample, and
+  inconclusive results
+- feed successful proof/experiment artifacts into Skeptic pre-checks
+- block publication if proof/experiment evidence is missing or inconclusive
+- keep all execution inside bounded workspaces
+
+Phase 3 is not allowed to:
+
+- claim theorem proof without machine-checkable evidence or a clear
+  counterexample-search boundary
+- claim empirical results without seeds, commands, logs, and hashes
+- hide inconclusive or negative results
+- run unbounded solver or experiment jobs
+- publish proof/experiment claims without a verifier artifact
