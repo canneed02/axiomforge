@@ -1,12 +1,22 @@
 import tempfile
 import unittest
+import subprocess
 from pathlib import Path
 from unittest import mock
 
 from axiomforge.cli import main
-from axiomforge.kernel import counts, create_task, initialize, publish_lab_note, run_bootstrap_cycle
+from axiomforge.kernel import (
+    counts,
+    create_task,
+    enqueue_publication,
+    initialize,
+    publish_lab_note,
+    queued_publications,
+    run_bootstrap_cycle,
+)
 from axiomforge.policy import validate_lab_note
 from axiomforge.providers import nvidia_inventory_from_env
+from axiomforge.publisher import publish_ready_queue
 from axiomforge.research import run_phase1_research_cycle
 
 
@@ -114,6 +124,38 @@ class AxiomForgeTest(unittest.TestCase):
             self.assertEqual(registry_counts["publication_queue"], 1)
             self.assertEqual(registry_counts["publications"], 1)
             self.assertIn("Publication Queue", out.read_text())
+
+    def test_publish_ready_queue_commits_autonomous_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "state"
+            repo = Path(tmp) / "repo"
+            repo.mkdir()
+            subprocess.run(["git", "-C", str(repo), "init"], check=True, stdout=subprocess.PIPE)
+            paths = initialize(root)
+            note = publish_lab_note(
+                paths,
+                title="Queued Note",
+                claim_type="measured",
+                evidence="events.jsonl",
+                body="Autonomous generation is disclosed. Limitations: test only.",
+            )
+            queue_id = enqueue_publication(
+                paths,
+                title="Queued Note",
+                path=note,
+                target="github",
+                status="ready",
+                policy={"claim_type": "measured"},
+            )
+
+            results = publish_ready_queue(root, repo, push=False)
+
+            self.assertEqual(results[0].queue_id, queue_id)
+            self.assertEqual(results[0].status, "published")
+            self.assertEqual(queued_publications(paths, status="ready"), [])
+            self.assertEqual(len(queued_publications(paths, status="published")), 1)
+            self.assertTrue((repo / "publications" / "manifest.json").exists())
+            self.assertTrue(list((repo / "publications" / "lab-notes").glob("queue-*.md")))
 
     def test_cli_init(self):
         with tempfile.TemporaryDirectory() as tmp:

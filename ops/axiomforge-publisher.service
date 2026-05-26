@@ -1,0 +1,19 @@
+[Unit]
+Description=AxiomForge autonomous publication publisher
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/axiomforge
+Environment=AXIOMFORGE_ROOT=/root/axiomforge-state
+Environment=AXIOMFORGE_PUBLICATION_REPO=/root/axiomforge-publications
+Environment=AXIOMFORGE_PUBLICATION_BRANCH=autonomous-publications
+EnvironmentFile=-/root/axiomforge-state/secrets.env
+ExecStart=/root/axiomforge/.venv/bin/axiomforge --root /root/axiomforge-state publish-ready
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+[Install]
+WantedBy=multi-user.target

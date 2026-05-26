@@ -168,7 +168,25 @@ Phase 1 is not allowed to:
 - treat model output as proof
 - publish secrets, private prompts, or raw credentials
 
-## First Serious Target After Phase 1
+## Phase 2 Definition
+
+Phase 2 is complete when AxiomForge can:
+
+- consume `ready` publication queue items
+- copy only approved public artifacts into a separate publication checkout
+- commit output using the autonomous system identity
+- push to `autonomous-publications`
+- update queue status to `published` or `blocked`
+- run publication unattended through its own systemd timer
+
+Phase 2 is not allowed to:
+
+- publish from arbitrary filesystem paths
+- publish files that fail secret scanning
+- switch the runtime code checkout away from `main`
+- bypass branch protection for implementation code
+
+## First Serious Target After Phase 2
 
 Build the autonomous code-writing harness:
 

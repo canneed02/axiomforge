@@ -24,6 +24,16 @@ class ForgePaths:
     lab_notes: Path
 
 
+@dataclass(frozen=True)
+class PublicationQueueItem:
+    id: int
+    title: str
+    path: Path
+    target: str
+    status: str
+    policy: dict[str, Any]
+
+
 def paths(root: Path) -> ForgePaths:
     root = root.expanduser().resolve()
     return ForgePaths(
@@ -242,6 +252,47 @@ def enqueue_publication(
         {"id": queue_id, "title": title, "path": publication_path, "target": target, "status": status},
     )
     return queue_id
+
+
+def queued_publications(p: ForgePaths, status: str = "ready") -> list[PublicationQueueItem]:
+    with sqlite3.connect(p.db) as db:
+        rows = db.execute(
+            """
+            SELECT id, title, path, target, status, policy_json
+            FROM publication_queue
+            WHERE status = ?
+            ORDER BY id
+            """,
+            (status,),
+        ).fetchall()
+    return [
+        PublicationQueueItem(
+            id=int(row[0]),
+            title=str(row[1]),
+            path=Path(str(row[2])),
+            target=str(row[3]),
+            status=str(row[4]),
+            policy=json.loads(str(row[5])),
+        )
+        for row in rows
+    ]
+
+
+def update_publication_status(p: ForgePaths, queue_id: int, status: str, detail: dict[str, Any]) -> None:
+    with sqlite3.connect(p.db) as db:
+        row = db.execute(
+            "SELECT policy_json FROM publication_queue WHERE id = ?",
+            (queue_id,),
+        ).fetchone()
+        policy = json.loads(str(row[0])) if row else {}
+        policy["status_detail"] = detail
+        db.execute(
+            """
+            UPDATE publication_queue SET status = ?, policy_json = ? WHERE id = ?
+            """,
+            (status, json.dumps(policy, sort_keys=True), queue_id),
+        )
+    append_event(p, "publication.status", {"id": queue_id, "status": status, "detail": detail})
 
 
 def publish_lab_note(p: ForgePaths, *, title: str, claim_type: str, body: str, evidence: str) -> Path:

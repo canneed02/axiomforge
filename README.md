@@ -40,6 +40,18 @@ Phase 1 turns the heartbeat into a bounded autonomous research cycle:
 The system can use provider keys without writing secrets to public artifacts.
 External model output is treated as proposal material, not proof.
 
+## Phase 2
+
+Phase 2 adds autonomous publication:
+
+- `research-cycle` creates queue items
+- `publish-ready` publishes only queue-approved output
+- output is committed by `AxiomForge Autonomous System`
+- publication uses the `autonomous-publications` branch
+- code runtime stays on `main`
+
+This keeps the public scientific stream separate from the implementation branch.
+
 ## Quickstart
 
 ```bash
@@ -52,6 +64,7 @@ axiomforge --root ./state status
 axiomforge --root ./state cycle --goal "bootstrap autonomous research memory"
 axiomforge --root ./state research-cycle --goal "maintain autonomous research memory"
 axiomforge --root ./state provider-inventory
+axiomforge --root ./state publish-ready --repo ./publication-repo --branch autonomous-publications
 ```
 
 ## Core Rule

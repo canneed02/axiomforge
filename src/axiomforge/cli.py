@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .kernel import counts, create_task, initialize, publish_lab_note, register_artifact, run_bootstrap_cycle
 from .providers import nvidia_inventory_from_env
+from .publisher import DEFAULT_PUBLICATION_BRANCH, publish_ready_queue
 from .research import run_phase1_research_cycle
 
 
@@ -30,6 +31,11 @@ def main() -> None:
     research_cycle.add_argument("--goal", required=True)
 
     subparsers.add_parser("provider-inventory", help="Print redacted provider inventory.")
+
+    publisher = subparsers.add_parser("publish-ready", help="Publish ready queue items to the autonomous output branch.")
+    publisher.add_argument("--repo", type=Path, default=Path(os.getenv("AXIOMFORGE_PUBLICATION_REPO", "./publication-repo")))
+    publisher.add_argument("--branch", default=os.getenv("AXIOMFORGE_PUBLICATION_BRANCH", DEFAULT_PUBLICATION_BRANCH))
+    publisher.add_argument("--no-push", action="store_true")
 
     task = subparsers.add_parser("create-task", help="Create a research task.")
     task.add_argument("--title", required=True)
@@ -71,6 +77,11 @@ def main() -> None:
 
     if args.command == "provider-inventory":
         print(json.dumps(nvidia_inventory_from_env().public_dict(), sort_keys=True))
+        return
+
+    if args.command == "publish-ready":
+        results = publish_ready_queue(root, args.repo, branch=args.branch, push=not args.no_push)
+        print(json.dumps([result.__dict__ for result in results], sort_keys=True))
         return
 
     if args.command == "create-task":
