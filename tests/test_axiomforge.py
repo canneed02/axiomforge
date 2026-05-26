@@ -54,6 +54,28 @@ class AxiomForgeTest(unittest.TestCase):
             self.assertEqual(counts(paths)["publications"], 1)
             self.assertIn("AxiomForge autonomous research system", out.read_text())
 
+    def test_lab_note_names_are_unique(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = initialize(Path(tmp))
+            first = publish_lab_note(
+                paths,
+                title="Repeated Note",
+                claim_type="measured",
+                evidence="events.jsonl",
+                body="Autonomous generation is disclosed. Limitations: test only.",
+            )
+            second = publish_lab_note(
+                paths,
+                title="Repeated Note",
+                claim_type="measured",
+                evidence="events.jsonl",
+                body="Autonomous generation is disclosed. Limitations: test only.",
+            )
+
+            self.assertNotEqual(first, second)
+            self.assertTrue(first.exists())
+            self.assertTrue(second.exists())
+
     def test_bootstrap_cycle(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = run_bootstrap_cycle(Path(tmp), "test bootstrap")

@@ -172,7 +172,7 @@ def publish_lab_note(p: ForgePaths, *, title: str, claim_type: str, body: str, e
     gate = validate_lab_note(title=title, claim_type=claim_type, body=body, evidence=evidence)
     if not gate.ok:
         raise ValueError("; ".join(gate.reasons))
-    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H%M%S")
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H%M%S-%f")
     out = p.lab_notes / f"{stamp}-{slugify(title)}.md"
     note = f"""# {title}
 
@@ -245,4 +245,3 @@ multi-agent review yet.
         body=body,
         evidence=evidence,
     )
-
