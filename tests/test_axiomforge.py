@@ -19,6 +19,7 @@ from axiomforge.providers import nvidia_inventory_from_env
 from axiomforge.proof import build_verifier, run_proof_cycle
 from axiomforge.publisher import publish_ready_queue
 from axiomforge.research import run_phase1_research_cycle
+from axiomforge.review import build_skeptic_review, run_review_cycle
 from axiomforge.sandbox import _safe_identifier, run_code_cycle, run_command, scan_for_secrets, validate_command
 
 
@@ -255,6 +256,44 @@ class AxiomForgeTest(unittest.TestCase):
         )
 
         self.assertEqual(verifier["status"], "counterexample")
+
+    def test_phase4_review_cycle_requires_prior_proof_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(ValueError):
+                run_review_cycle(Path(tmp), timeout_seconds=5)
+
+    def test_phase4_review_cycle_creates_review_and_replication_artifacts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            run_proof_cycle(root, "phase4 source proof", timeout_seconds=20)
+            out = run_review_cycle(root, timeout_seconds=20)
+            paths = initialize(root)
+
+            self.assertTrue(out.exists())
+            registry_counts = counts(paths)
+            self.assertEqual(registry_counts["proof_runs"], 1)
+            self.assertEqual(registry_counts["review_runs"], 1)
+            self.assertEqual(registry_counts["replication_runs"], 1)
+            self.assertEqual(registry_counts["publication_queue"], 2)
+            self.assertIn("Phase 4 review and replication cycle", out.read_text())
+            self.assertTrue(list((root / "artifacts" / "review-runs").glob("*/skeptic_review.json")))
+            self.assertTrue(list((root / "artifacts" / "review-runs").glob("*/replication.json")))
+            self.assertTrue(list((root / "artifacts" / "review-runs").glob("*/gate.json")))
+
+    def test_phase4_skeptic_blocks_missing_raw_results(self):
+        subject = {
+            "id": 1,
+            "verifier": {
+                "status": "verified",
+                "checks": {"has_machine_checkable_outputs": True},
+                "harness_statuses": {"symbolic": "proved", "empirical": "replicated"},
+                "claim_boundary": "boundary covers a test fixture",
+            },
+        }
+        review = build_skeptic_review(subject, {"results": []}, {"hashes": {"verifier": "abc"}})
+
+        self.assertEqual(review["status"], "blocked")
+        self.assertTrue(any(objection["severity"] == "critical" for objection in review["objections"]))
 
     def test_cli_init(self):
         with tempfile.TemporaryDirectory() as tmp:

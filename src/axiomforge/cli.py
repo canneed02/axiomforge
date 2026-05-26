@@ -10,6 +10,7 @@ from .providers import nvidia_inventory_from_env
 from .proof import run_proof_cycle
 from .publisher import DEFAULT_PUBLICATION_BRANCH, publish_ready_queue
 from .research import run_phase1_research_cycle
+from .review import run_review_cycle
 from .sandbox import run_code_cycle
 
 
@@ -39,6 +40,9 @@ def main() -> None:
     proof_cycle = subparsers.add_parser("proof-cycle", help="Run one Phase 3 proof/experiment cycle.")
     proof_cycle.add_argument("--objective", required=True)
     proof_cycle.add_argument("--timeout-seconds", type=int, default=45)
+
+    review_cycle = subparsers.add_parser("review-cycle", help="Run one Phase 4 reviewer/replicator gate cycle.")
+    review_cycle.add_argument("--timeout-seconds", type=int, default=45)
 
     subparsers.add_parser("provider-inventory", help="Print redacted provider inventory.")
 
@@ -92,6 +96,11 @@ def main() -> None:
 
     if args.command == "proof-cycle":
         out = run_proof_cycle(root, args.objective, timeout_seconds=args.timeout_seconds)
+        print(f"lab_note={out}")
+        return
+
+    if args.command == "review-cycle":
+        out = run_review_cycle(root, timeout_seconds=args.timeout_seconds)
         print(f"lab_note={out}")
         return
 

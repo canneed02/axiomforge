@@ -152,6 +152,22 @@ def initialize(root: Path) -> ForgePaths:
                 status TEXT NOT NULL,
                 verifier_json TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS review_runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                subject_type TEXT NOT NULL,
+                subject_id INTEGER NOT NULL,
+                status TEXT NOT NULL,
+                review_json TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS replication_runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                subject_type TEXT NOT NULL,
+                subject_id INTEGER NOT NULL,
+                status TEXT NOT NULL,
+                replication_json TEXT NOT NULL
+            );
             """
         )
         db.execute(
@@ -325,6 +341,76 @@ def register_proof_run(
     return run_id
 
 
+def latest_proof_run(p: ForgePaths) -> dict[str, Any] | None:
+    with db_session(p) as db:
+        row = db.execute(
+            """
+            SELECT id, ts, objective, workspace, status, verifier_json
+            FROM proof_runs
+            ORDER BY id DESC
+            LIMIT 1
+            """
+        ).fetchone()
+    if not row:
+        return None
+    return {
+        "id": int(row[0]),
+        "ts": str(row[1]),
+        "objective": str(row[2]),
+        "workspace": str(row[3]),
+        "status": str(row[4]),
+        "verifier": json.loads(str(row[5])),
+    }
+
+
+def register_review_run(
+    p: ForgePaths,
+    *,
+    subject_type: str,
+    subject_id: int,
+    status: str,
+    review: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    with db_session(p) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO review_runs (ts, subject_type, subject_id, status, review_json)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (ts, subject_type, subject_id, status, json.dumps(review, sort_keys=True)),
+        )
+        run_id = int(cursor.lastrowid)
+    append_event(p, "review_run.registered", {"id": run_id, "subject_type": subject_type, "subject_id": subject_id, "status": status})
+    return run_id
+
+
+def register_replication_run(
+    p: ForgePaths,
+    *,
+    subject_type: str,
+    subject_id: int,
+    status: str,
+    replication: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    with db_session(p) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO replication_runs (ts, subject_type, subject_id, status, replication_json)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (ts, subject_type, subject_id, status, json.dumps(replication, sort_keys=True)),
+        )
+        run_id = int(cursor.lastrowid)
+    append_event(
+        p,
+        "replication_run.registered",
+        {"id": run_id, "subject_type": subject_type, "subject_id": subject_id, "status": status},
+    )
+    return run_id
+
+
 def queued_publications(p: ForgePaths, status: str = "ready") -> list[PublicationQueueItem]:
     with db_session(p) as db:
         rows = db.execute(
@@ -414,6 +500,8 @@ def counts(p: ForgePaths) -> dict[str, int]:
                 "publication_queue",
                 "code_runs",
                 "proof_runs",
+                "review_runs",
+                "replication_runs",
             ]
         }
 

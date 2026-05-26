@@ -1,0 +1,17 @@
+[Unit]
+Description=AxiomForge Phase 4 reviewer and replicator gate
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/axiomforge
+Environment=AXIOMFORGE_ROOT=/root/axiomforge-state
+EnvironmentFile=-/root/axiomforge-state/secrets.env
+ExecStart=/root/axiomforge/.venv/bin/axiomforge --root /root/axiomforge-state review-cycle --timeout-seconds 45
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+[Install]
+WantedBy=multi-user.target

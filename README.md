@@ -81,6 +81,19 @@ Phase 3 adds the proof and experiment harness:
 The system can measure proof and experiment infrastructure without claiming a
 new theorem or broad empirical result.
 
+## Phase 4
+
+Phase 4 adds the reviewer and replicator gate:
+
+- Skeptic Agent reads verifier, raw results, manifest, and policy evidence
+- objections include severity and required fixes
+- Replicator Agent reruns proof/experiment harnesses in a clean workspace
+- replication compares verifier and harness statuses
+- publication eligibility requires both review and replication pass
+
+Failed review or replication creates follow-up work instead of hiding the
+failure.
+
 ## Early Publication Capability
 
 Autonomous publication has been implemented early as supporting infrastructure:
@@ -107,6 +120,7 @@ axiomforge --root ./state cycle --goal "bootstrap autonomous research memory"
 axiomforge --root ./state research-cycle --goal "maintain autonomous research memory"
 axiomforge --root ./state code-cycle --objective "maintain sandbox code-writing capability"
 axiomforge --root ./state proof-cycle --objective "maintain proof and experiment harness"
+axiomforge --root ./state review-cycle
 axiomforge --root ./state provider-inventory
 axiomforge --root ./state publish-ready --repo ./publication-repo --branch autonomous-publications
 ```
