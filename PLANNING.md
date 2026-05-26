@@ -372,6 +372,12 @@ Completed:
 - `axiomforge-site.timer` runs the public site builder
 - GitHub Pages is configured from `autonomous-publications` branch root
 - server smoke site-build passed local verification before push
+- Phase 6 release artifact builder exists and is deployed on the server
+- release-cycle creates versioned release candidate directories, manifests,
+  checksums, tarballs, and annotated git tags under bot identity
+- `axiomforge-release.timer` runs the release artifact builder daily
+- server smoke release-cycle passed release gates and pushed release candidate
+  artifacts plus tag
 
 Important correction:
 
@@ -503,20 +509,23 @@ Public site:
 https://canneed02.github.io/axiomforge/
 ```
 
-## Next Phase
+## Phase 6 Completion
 
-The next phase is Phase 6: automatic release artifacts.
+Phase 6 is complete.
 
 Phase 6 success criteria:
 
-- create release candidate packages from gated public artifacts
-- include checksums, manifest, raw evidence references, and generated site URL
-- tag release candidates under bot identity
+- create release candidate packages from gated public artifacts: complete
+- include checksums, manifest, raw evidence references, and generated site URL:
+  complete
+- tag release candidates under bot identity: complete
 - create GitHub releases only when policy, site, skeptic, and replicator gates
-  pass
-- keep release artifacts immutable after publication
+  pass: release artifacts and tags are automatic; GitHub Releases are reserved
+  for a bot-scoped GitHub token rather than a human credential
+- keep release artifacts immutable after publication: complete through unique
+  versioned paths and tags
 - block release creation for missing evidence, failed replication, or failed
-  site verification
+  site verification: complete
 
 Phase 6 is not allowed to:
 
@@ -524,3 +533,33 @@ Phase 6 is not allowed to:
 - overwrite or mutate published release assets silently
 - tag arbitrary commits without artifact manifest evidence
 - claim final scientific discovery from infrastructure validation alone
+
+First release candidate:
+
+```text
+axiomforge-public-ledger-v2026.05.26.054426.861148
+```
+
+## Next Phase
+
+The next phase is Phase 7: paper engine and DOI/arXiv-ready pipeline.
+
+Phase 7 success criteria:
+
+- generate paper drafts from gated public artifacts
+- include abstract, method, evidence table, limitations, reproducibility
+  appendix, and artifact manifest references
+- produce a DOI/arXiv-ready package without automatically impersonating a human
+  submitter
+- include bot-authorship disclosure on every draft
+- block paper packages if release artifacts, site, skeptic review, replication,
+  or evidence manifests are missing
+- prepare citation and bibliography metadata for public artifacts
+- keep generated drafts versioned and immutable after publication
+
+Phase 7 is not allowed to:
+
+- submit to arXiv or DOI providers under a human identity
+- claim scientific novelty from infrastructure validation alone
+- hide limitations or failed replication
+- cite artifacts that do not exist in the public ledger
