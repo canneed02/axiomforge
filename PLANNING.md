@@ -572,18 +572,20 @@ axiomforge-paper-draft-v2026.05.26.055551.762979
 
 ## Next Phase
 
-The next phase is Phase 8: grand challenge research portfolio.
+Phase 8 is complete.
 
 Phase 8 success criteria:
 
-- create a machine-readable portfolio of grand challenge programs
-- separate infrastructure maintenance tasks from real research objectives
+- create a machine-readable portfolio of grand challenge programs: complete
+- separate infrastructure maintenance tasks from real research objectives:
+  complete
 - define claim boundaries, verifier requirements, datasets, and publication
-  gates for each challenge
+  gates for each challenge: complete
 - route challenge work through existing builder, proof, skeptic, replicator,
-  site, release, and paper engines
-- prioritize tasks by expected evidence value, not hype
-- keep failed attempts and negative results visible in the internal ledger
+  site, release, and paper engines: complete
+- prioritize tasks by expected evidence value, not hype: complete
+- keep failed attempts and negative results visible in the internal ledger:
+  complete
 
 Phase 8 is not allowed to:
 
@@ -592,3 +594,28 @@ Phase 8 is not allowed to:
 - let a single agent bypass skeptic or replication gates
 - optimize for public noise over verified progress
 - erase failed challenge attempts
+
+First grand challenge route:
+
+```text
+formal_micro_conjecture_factory
+```
+
+First Phase 8 public release package:
+
+```text
+axiomforge-public-ledger-v2026.05.26.060917.051655
+```
+
+First Phase 8 paper package:
+
+```text
+axiomforge-paper-draft-v2026.05.26.060923.186517
+```
+
+## Roadmap Completion
+
+The locked Phase 0-8 roadmap is complete.
+
+Future work must be framed as post-roadmap hardening or a new planning section,
+not as an implicit change to the completed Phase 0-8 scope.

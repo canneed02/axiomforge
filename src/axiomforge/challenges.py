@@ -16,6 +16,7 @@ from .kernel import (
     register_challenge_run,
     register_claim,
     slugify,
+    update_challenge_run,
     utc_now,
 )
 from .paper import build_paper_package
@@ -394,4 +395,60 @@ publication, release packaging, and paper packaging.
             "overclaim_block": True,
         },
     )
+    if execute_route and repo is not None and route_result["status"] == "passed":
+        final_errors: list[str] = []
+        final_steps: list[dict[str, Any]] = []
+        try:
+            publish_results = publish_ready_queue(root, repo.expanduser().resolve(), branch=branch, push=push)
+            final_steps.append(
+                {
+                    "stage": "challenge_note_publisher",
+                    "status": "passed",
+                    "results": [result.__dict__ for result in publish_results],
+                }
+            )
+            site_result = publish_public_site(repo.expanduser().resolve(), branch=branch, push=push)
+            final_steps.append(
+                {
+                    "stage": "challenge_note_site",
+                    "status": site_result.status,
+                    "pages": list(site_result.pages),
+                    "errors": list(site_result.errors),
+                }
+            )
+            final_errors.extend(site_result.errors)
+            if not final_errors:
+                release_result = build_release_candidate(root, repo.expanduser().resolve(), branch=branch, push=push)
+                final_steps.append(
+                    {
+                        "stage": "challenge_note_release",
+                        "status": release_result.status,
+                        "manifest": release_result.manifest,
+                        "tag": release_result.tag,
+                        "errors": list(release_result.errors),
+                    }
+                )
+                final_errors.extend(release_result.errors)
+            if not final_errors:
+                paper_result = build_paper_package(root, repo.expanduser().resolve(), branch=branch, push=push)
+                final_steps.append(
+                    {
+                        "stage": "challenge_note_paper",
+                        "status": paper_result.status,
+                        "manifest": paper_result.manifest,
+                        "tag": paper_result.tag,
+                        "errors": list(paper_result.errors),
+                    }
+                )
+                final_errors.extend(paper_result.errors)
+        except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError) as exc:
+            final_errors.append(str(exc)[:1000])
+        route_result["steps"].extend(final_steps)
+        route_result["errors"].extend(final_errors)
+        route_result["status"] = "passed" if not route_result["errors"] else "blocked"
+        _write_json(route_result_path, route_result)
+        status = "verified" if route_result["status"] == "passed" else "blocked"
+        challenge_payload["route_result"] = str(route_result_path)
+        update_challenge_run(p, run_id, status=status, challenge=challenge_payload)
+
     return ChallengeResult(selected["id"], status, str(manifest_path), route_result["status"], tuple(route_result["errors"]))

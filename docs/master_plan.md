@@ -5,10 +5,10 @@ The authoritative planning record is [`../PLANNING.md`](../PLANNING.md).
 This file exists only as a compatibility entry point for readers who start from
 `docs/`.
 
-Current locked next phase:
+Roadmap status:
 
 ```text
-Phase 8: grand challenge research portfolio
+Phase 0-8 complete
 ```
 
 The autonomous publisher already exists as an early supporting capability, but

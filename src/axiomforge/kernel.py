@@ -560,6 +560,17 @@ def register_challenge_run(
     return run_id
 
 
+def update_challenge_run(p: ForgePaths, run_id: int, *, status: str, challenge: dict[str, Any]) -> None:
+    with db_session(p) as db:
+        db.execute(
+            """
+            UPDATE challenge_runs SET status = ?, challenge_json = ? WHERE id = ?
+            """,
+            (status, json.dumps(challenge, sort_keys=True), run_id),
+        )
+    append_event(p, "challenge_run.updated", {"id": run_id, "status": status})
+
+
 def queued_publications(p: ForgePaths, status: str = "ready") -> list[PublicationQueueItem]:
     with db_session(p) as db:
         rows = db.execute(

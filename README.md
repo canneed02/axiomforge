@@ -15,10 +15,10 @@ The locked planning record is [`PLANNING.md`](PLANNING.md).
 
 If another document disagrees with `PLANNING.md`, `PLANNING.md` wins.
 
-Current next phase:
+Roadmap status:
 
 ```text
-Phase 8: grand challenge research portfolio
+Phase 0-8 complete
 ```
 
 ## Phase 0
