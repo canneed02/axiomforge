@@ -168,6 +168,13 @@ def initialize(root: Path) -> ForgePaths:
                 status TEXT NOT NULL,
                 replication_json TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS release_runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                version TEXT NOT NULL,
+                status TEXT NOT NULL,
+                release_json TEXT NOT NULL
+            );
             """
         )
         db.execute(
@@ -411,6 +418,69 @@ def register_replication_run(
     return run_id
 
 
+def latest_review_and_replication(p: ForgePaths) -> dict[str, Any]:
+    with db_session(p) as db:
+        review = db.execute(
+            """
+            SELECT id, ts, subject_type, subject_id, status, review_json
+            FROM review_runs
+            ORDER BY id DESC
+            LIMIT 1
+            """
+        ).fetchone()
+        replication = db.execute(
+            """
+            SELECT id, ts, subject_type, subject_id, status, replication_json
+            FROM replication_runs
+            ORDER BY id DESC
+            LIMIT 1
+            """
+        ).fetchone()
+    return {
+        "review": None
+        if not review
+        else {
+            "id": int(review[0]),
+            "ts": str(review[1]),
+            "subject_type": str(review[2]),
+            "subject_id": int(review[3]),
+            "status": str(review[4]),
+            "payload": json.loads(str(review[5])),
+        },
+        "replication": None
+        if not replication
+        else {
+            "id": int(replication[0]),
+            "ts": str(replication[1]),
+            "subject_type": str(replication[2]),
+            "subject_id": int(replication[3]),
+            "status": str(replication[4]),
+            "payload": json.loads(str(replication[5])),
+        },
+    }
+
+
+def register_release_run(
+    p: ForgePaths,
+    *,
+    version: str,
+    status: str,
+    release: dict[str, Any],
+) -> int:
+    ts = utc_now()
+    with db_session(p) as db:
+        cursor = db.execute(
+            """
+            INSERT INTO release_runs (ts, version, status, release_json)
+            VALUES (?, ?, ?, ?)
+            """,
+            (ts, version, status, json.dumps(release, sort_keys=True)),
+        )
+        run_id = int(cursor.lastrowid)
+    append_event(p, "release_run.registered", {"id": run_id, "version": version, "status": status})
+    return run_id
+
+
 def queued_publications(p: ForgePaths, status: str = "ready") -> list[PublicationQueueItem]:
     with db_session(p) as db:
         rows = db.execute(
@@ -502,6 +572,7 @@ def counts(p: ForgePaths) -> dict[str, int]:
                 "proof_runs",
                 "review_runs",
                 "replication_runs",
+                "release_runs",
             ]
         }
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Run AxiomForge Phase 6 release artifact builder
+
+[Timer]
+OnBootSec=23min
+OnUnitActiveSec=24h
+RandomizedDelaySec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

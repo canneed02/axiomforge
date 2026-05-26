@@ -1,0 +1,18 @@
+[Unit]
+Description=AxiomForge Phase 6 release artifact builder
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/axiomforge
+Environment=AXIOMFORGE_ROOT=/root/axiomforge-state
+Environment=AXIOMFORGE_PUBLICATION_REPO=/root/axiomforge-publications
+Environment=AXIOMFORGE_PUBLICATION_BRANCH=autonomous-publications
+ExecStart=/root/axiomforge/.venv/bin/axiomforge --root /root/axiomforge-state release-cycle
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+[Install]
+WantedBy=multi-user.target

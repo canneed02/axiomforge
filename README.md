@@ -127,6 +127,21 @@ Public site:
 https://canneed02.github.io/axiomforge/
 ```
 
+## Phase 6
+
+Phase 6 adds automatic release artifacts:
+
+- release candidate directory
+- release manifest
+- checksums
+- public ledger tarball
+- bot-authored commit
+- annotated git tag
+- release gate using site verification, skeptic review, and replication state
+
+The release candidate packages public ledger artifacts. It does not claim final
+scientific discovery.
+
 ## Quickstart
 
 ```bash
@@ -144,6 +159,7 @@ axiomforge --root ./state review-cycle
 axiomforge --root ./state provider-inventory
 axiomforge --root ./state publish-ready --repo ./publication-repo --branch autonomous-publications
 axiomforge site-build --repo ./publication-repo --branch autonomous-publications
+axiomforge --root ./state release-cycle --repo ./publication-repo --branch autonomous-publications
 ```
 
 ## Core Rule
