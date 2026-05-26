@@ -9,6 +9,18 @@ a multi-agent scientific system.
 LiveProof is not the center of AxiomForge. LiveProof is one possible research
 program that AxiomForge can manage later.
 
+## Planning
+
+The locked planning record is [`PLANNING.md`](PLANNING.md).
+
+If another document disagrees with `PLANNING.md`, `PLANNING.md` wins.
+
+Current next phase:
+
+```text
+Phase 2: sandbox code-writing agent
+```
+
 ## Phase 0
 
 Phase 0 creates the non-negotiable substrate:
@@ -40,9 +52,9 @@ Phase 1 turns the heartbeat into a bounded autonomous research cycle:
 The system can use provider keys without writing secrets to public artifacts.
 External model output is treated as proposal material, not proof.
 
-## Phase 2
+## Early Publication Capability
 
-Phase 2 adds autonomous publication:
+Autonomous publication has been implemented early as supporting infrastructure:
 
 - `research-cycle` creates queue items
 - `publish-ready` publishes only queue-approved output
@@ -50,7 +62,8 @@ Phase 2 adds autonomous publication:
 - publication uses the `autonomous-publications` branch
 - code runtime stays on `main`
 
-This keeps the public scientific stream separate from the implementation branch.
+This is not the locked Phase 2. In `PLANNING.md`, publication belongs to Phase 5.
+The next implementation phase remains the sandbox code-writing agent.
 
 ## Quickstart
 

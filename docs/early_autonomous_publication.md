@@ -1,7 +1,14 @@
-# Phase 2 Autonomous Publication
+# Early Autonomous Publication
 
-Phase 2 makes AxiomForge publish its own approved outputs instead of relying on
-manual posting.
+Autonomous publication exists as supporting infrastructure that was implemented
+early. It is not the locked Phase 2.
+
+The authoritative phase roadmap is [`../PLANNING.md`](../PLANNING.md). In that
+roadmap, publication belongs to Phase 5. The next implementation phase remains:
+
+```text
+Phase 2: sandbox code-writing agent
+```
 
 ## Separation
 
