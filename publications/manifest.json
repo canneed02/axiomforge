@@ -1418,7 +1418,22 @@
       "queue_id": 103,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-27-133339-713577-phase-4-review-replication-cycle.md",
       "title": "Phase 4 Review Replication Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000104-2026-05-27-135019-557147-phase-2-sandbox-code-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=107; code_run_id=21; summary=/root/axiomforge-state/artifacts/code-runs/2026-05-27T134951.894995Z0000-maintain-sandbox-code-writing-capability/summary.json; diff=/root/axiomforge-state/artifacts/code-runs/2026-05-27T134951.894995Z0000-maintain-sandbox-code-writing-capability/diff.patch; logs=/root/axiomforge-state/artifacts/code-runs/2026-05-27T134951.894995Z0000-maintain-sandbox-code-writing-capability/commands.json",
+        "review_required_before_claiming_science": true,
+        "secret_scan_passed": true,
+        "tests_passed": true
+      },
+      "published_at": "2026-05-27T14:09:34.749446+00:00",
+      "queue_id": 104,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-27-135019-557147-phase-2-sandbox-code-cycle.md",
+      "title": "Phase 2 Sandbox Code Cycle"
     }
   ],
-  "updated_at": "2026-05-27T14:09:32.830652+00:00"
+  "updated_at": "2026-05-27T14:09:34.749287+00:00"
 }
