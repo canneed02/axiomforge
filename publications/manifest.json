@@ -1662,7 +1662,22 @@
       "queue_id": 121,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-27-215605-808925-phase-1-research-cycle.md",
       "title": "Phase 1 Research Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000122-2026-05-27-220204-024018-phase-4-review-replication-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=125; review_id=25; replication_id=25; review=/root/axiomforge-state/artifacts/review-runs/2026-05-27T220203.650338Z0000-proof-run-24/skeptic_review.json; replication=/root/axiomforge-state/artifacts/review-runs/2026-05-27T220203.650338Z0000-proof-run-24/replication.json; gate=/root/axiomforge-state/artifacts/review-runs/2026-05-27T220203.650338Z0000-proof-run-24/gate.json",
+        "publication_gate": "passed",
+        "replication_passed": true,
+        "skeptic_review_passed": true
+      },
+      "published_at": "2026-05-27T22:51:43.417347+00:00",
+      "queue_id": 122,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-27-220204-024018-phase-4-review-replication-cycle.md",
+      "title": "Phase 4 Review Replication Cycle"
     }
   ],
-  "updated_at": "2026-05-27T22:51:41.777442+00:00"
+  "updated_at": "2026-05-27T22:51:43.417218+00:00"
 }
