@@ -1171,7 +1171,22 @@
       "queue_id": 85,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-27-061622-466386-phase-8-grand-challenge-portfolio-cycle.md",
       "title": "Phase 8 Grand Challenge Portfolio Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000086-2026-05-27-070906-537473-phase-4-review-replication-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=89; review_id=18; replication_id=18; review=/root/axiomforge-state/artifacts/review-runs/2026-05-27T070905.955162Z0000-proof-run-17/skeptic_review.json; replication=/root/axiomforge-state/artifacts/review-runs/2026-05-27T070905.955162Z0000-proof-run-17/replication.json; gate=/root/axiomforge-state/artifacts/review-runs/2026-05-27T070905.955162Z0000-proof-run-17/gate.json",
+        "publication_gate": "passed",
+        "replication_passed": true,
+        "skeptic_review_passed": true
+      },
+      "published_at": "2026-05-27T07:48:37.644942+00:00",
+      "queue_id": 86,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-27-070906-537473-phase-4-review-replication-cycle.md",
+      "title": "Phase 4 Review Replication Cycle"
     }
   ],
-  "updated_at": "2026-05-27T06:16:25.196688+00:00"
+  "updated_at": "2026-05-27T07:48:37.644798+00:00"
 }
