@@ -1996,7 +1996,22 @@
       "queue_id": 144,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-28-063332-491868-phase-3-proof-experiment-cycle.md",
       "title": "Phase 3 Proof Experiment Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000145-2026-05-28-063332-903393-phase-4-review-replication-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=149; review_id=30; replication_id=30; review=/root/axiomforge-state/artifacts/review-runs/2026-05-28T063332.516192Z0000-proof-run-29/skeptic_review.json; replication=/root/axiomforge-state/artifacts/review-runs/2026-05-28T063332.516192Z0000-proof-run-29/replication.json; gate=/root/axiomforge-state/artifacts/review-runs/2026-05-28T063332.516192Z0000-proof-run-29/gate.json",
+        "publication_gate": "passed",
+        "replication_passed": true,
+        "skeptic_review_passed": true
+      },
+      "published_at": "2026-05-28T06:33:42.486855+00:00",
+      "queue_id": 145,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-28-063332-903393-phase-4-review-replication-cycle.md",
+      "title": "Phase 4 Review Replication Cycle"
     }
   ],
-  "updated_at": "2026-05-28T06:33:40.722950+00:00"
+  "updated_at": "2026-05-28T06:33:42.486702+00:00"
 }
