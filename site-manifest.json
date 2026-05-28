@@ -1241,6 +1241,46 @@
       "published_at": "2026-05-28T02:07:22.356517+00:00",
       "queue_id": 131,
       "title": "Phase 1 Research Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=135; review_id=27; replication_id=27; review=/root/axiomforge-state/artifacts/review-runs/2026-05-28T021426.229995Z0000-proof-run-26/skeptic_review.json; replication=/root/axiomforge-state/artifacts/review-runs/2026-05-28T021426.229995Z0000-proof-run-26/replication.json; gate=/root/axiomforge-state/artifacts/review-runs/2026-05-28T021426.229995Z0000-proof-run-26/gate.json",
+      "html": "publications/lab-notes/queue-000132-2026-05-28-021426-761855-phase-4-review-replication-cycle.html",
+      "markdown": "publications/lab-notes/queue-000132-2026-05-28-021426-761855-phase-4-review-replication-cycle.md",
+      "published_at": "2026-05-28T03:14:34.974669+00:00",
+      "queue_id": 132,
+      "title": "Phase 4 Review Replication Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=136; proof_run_id=27; raw=/root/axiomforge-state/artifacts/proof-runs/2026-05-28T023117.599508Z0000-maintain-proof-and-experiment-harness/raw_results.json; verifier=/root/axiomforge-state/artifacts/proof-runs/2026-05-28T023117.599508Z0000-maintain-proof-and-experiment-harness/verifier.json; manifest=/root/axiomforge-state/artifacts/proof-runs/2026-05-28T023117.599508Z0000-maintain-proof-and-experiment-harness/manifest.json",
+      "html": "publications/lab-notes/queue-000133-2026-05-28-023118-026237-phase-3-proof-experiment-cycle.html",
+      "markdown": "publications/lab-notes/queue-000133-2026-05-28-023118-026237-phase-3-proof-experiment-cycle.md",
+      "published_at": "2026-05-28T03:14:36.799004+00:00",
+      "queue_id": 133,
+      "title": "Phase 3 Proof Experiment Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=137; code_run_id=27; summary=/root/axiomforge-state/artifacts/code-runs/2026-05-28T024106.760160Z0000-maintain-sandbox-code-writing-capability/summary.json; diff=/root/axiomforge-state/artifacts/code-runs/2026-05-28T024106.760160Z0000-maintain-sandbox-code-writing-capability/diff.patch; logs=/root/axiomforge-state/artifacts/code-runs/2026-05-28T024106.760160Z0000-maintain-sandbox-code-writing-capability/commands.json",
+      "html": "publications/lab-notes/queue-000134-2026-05-28-024349-954367-phase-2-sandbox-code-cycle.html",
+      "markdown": "publications/lab-notes/queue-000134-2026-05-28-024349-954367-phase-2-sandbox-code-cycle.md",
+      "published_at": "2026-05-28T03:14:38.619552+00:00",
+      "queue_id": 134,
+      "title": "Phase 2 Sandbox Code Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=138; run_id=51; proposal=/root/axiomforge-state/artifacts/research-runs/2026-05-28T030021.920494Z0000-maintain-autonomous-research-memory/proposal.json; verifier=/root/axiomforge-state/artifacts/research-runs/2026-05-28T030021.920494Z0000-maintain-autonomous-research-memory/verifier.json",
+      "html": "publications/lab-notes/queue-000135-2026-05-28-030505-681908-phase-1-research-cycle.html",
+      "markdown": "publications/lab-notes/queue-000135-2026-05-28-030505-681908-phase-1-research-cycle.md",
+      "published_at": "2026-05-28T03:14:40.337287+00:00",
+      "queue_id": 135,
+      "title": "Phase 1 Research Cycle"
     }
   ]
 }
