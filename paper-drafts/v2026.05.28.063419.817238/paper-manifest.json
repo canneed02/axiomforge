@@ -1,0 +1,27 @@
+{
+  "artifacts": {
+    "arxiv-submission-notes.md": "arxiv-submission-notes.md",
+    "checksums": "checksums.txt",
+    "citation.cff": "citation.cff",
+    "doi-metadata.json": "doi-metadata.json",
+    "package": "axiomforge-paper-draft-v2026.05.28.063419.817238.tar.gz",
+    "paper.md": "paper.md",
+    "paper.tex": "paper.tex",
+    "references.bib": "references.bib",
+    "submission-checklist.md": "submission-checklist.md"
+  },
+  "branch": "autonomous-publications",
+  "gate_errors": [],
+  "generated_by": "AxiomForge Autonomous System",
+  "limitations": [
+    "paper package is prepared, not externally submitted",
+    "bot authorship must remain disclosed",
+    "infrastructure validation is not a scientific novelty claim"
+  ],
+  "release_tag": "axiomforge-public-ledger-v2026.05.28.063413.513595",
+  "release_version": "v2026.05.28.063413.513595",
+  "site_url": "https://canneed02.github.io/axiomforge/",
+  "status": "passed",
+  "tag": "axiomforge-paper-draft-v2026.05.28.063419.817238",
+  "version": "v2026.05.28.063419.817238"
+}
