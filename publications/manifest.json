@@ -1852,7 +1852,20 @@
       "queue_id": 134,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-28-024349-954367-phase-2-sandbox-code-cycle.md",
       "title": "Phase 2 Sandbox Code Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000135-2026-05-28-030505-681908-phase-1-research-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "evidence": "task_id=138; run_id=51; proposal=/root/axiomforge-state/artifacts/research-runs/2026-05-28T030021.920494Z0000-maintain-autonomous-research-memory/proposal.json; verifier=/root/axiomforge-state/artifacts/research-runs/2026-05-28T030021.920494Z0000-maintain-autonomous-research-memory/verifier.json",
+        "verifier_passed": true
+      },
+      "published_at": "2026-05-28T03:14:40.337287+00:00",
+      "queue_id": 135,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-28-030505-681908-phase-1-research-cycle.md",
+      "title": "Phase 1 Research Cycle"
     }
   ],
-  "updated_at": "2026-05-28T03:14:38.619422+00:00"
+  "updated_at": "2026-05-28T03:14:40.337192+00:00"
 }
