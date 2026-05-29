@@ -3243,7 +3243,23 @@
       "queue_id": 231,
       "source": "/root/axiomforge-state/public/lab-notes/2026-05-29-164512-357511-phase-1-research-cycle.md",
       "title": "Phase 1 Research Cycle"
+    },
+    {
+      "path": "publications/lab-notes/queue-000232-2026-05-29-165526-738580-phase-3-proof-experiment-cycle.md",
+      "policy": {
+        "autonomous_disclosure": true,
+        "claim_type": "measured",
+        "empirical_replicated": true,
+        "evidence": "task_id=235; proof_run_id=47; raw=/root/axiomforge-state/artifacts/proof-runs/2026-05-29T165526.367641Z0000-maintain-proof-and-experiment-harness/raw_results.json; verifier=/root/axiomforge-state/artifacts/proof-runs/2026-05-29T165526.367641Z0000-maintain-proof-and-experiment-harness/verifier.json; manifest=/root/axiomforge-state/artifacts/proof-runs/2026-05-29T165526.367641Z0000-maintain-proof-and-experiment-harness/manifest.json",
+        "review_required_before_claiming_science": true,
+        "symbolic_proved": true,
+        "verifier_status": "verified"
+      },
+      "published_at": "2026-05-29T17:25:01.675211+00:00",
+      "queue_id": 232,
+      "source": "/root/axiomforge-state/public/lab-notes/2026-05-29-165526-738580-phase-3-proof-experiment-cycle.md",
+      "title": "Phase 3 Proof Experiment Cycle"
     }
   ],
-  "updated_at": "2026-05-29T17:24:59.837790+00:00"
+  "updated_at": "2026-05-29T17:25:01.675027+00:00"
 }
