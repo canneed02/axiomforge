@@ -2391,6 +2391,16 @@
       "published_at": "2026-05-29T23:54:29.284596+00:00",
       "queue_id": 248,
       "title": "Phase 2 Sandbox Code Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=252; run_id=94; proposal=/root/axiomforge-state/artifacts/research-runs/2026-05-29T235910.936754Z0000-maintain-autonomous-research-memory/proposal.json; verifier=/root/axiomforge-state/artifacts/research-runs/2026-05-29T235910.936754Z0000-maintain-autonomous-research-memory/verifier.json",
+      "html": "publications/lab-notes/queue-000249-2026-05-30-000354-065351-phase-1-research-cycle.html",
+      "markdown": "publications/lab-notes/queue-000249-2026-05-30-000354-065351-phase-1-research-cycle.md",
+      "published_at": "2026-05-30T00:55:20.268709+00:00",
+      "queue_id": 249,
+      "title": "Phase 1 Research Cycle"
     }
   ]
 }
