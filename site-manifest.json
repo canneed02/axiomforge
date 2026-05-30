@@ -2441,6 +2441,26 @@
       "published_at": "2026-05-30T02:04:30.794531+00:00",
       "queue_id": 253,
       "title": "Phase 2 Sandbox Code Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=257; run_id=96; proposal=/root/axiomforge-state/artifacts/research-runs/2026-05-30T020326.425973Z0000-maintain-autonomous-research-memory/proposal.json; verifier=/root/axiomforge-state/artifacts/research-runs/2026-05-30T020326.425973Z0000-maintain-autonomous-research-memory/verifier.json",
+      "html": "publications/lab-notes/queue-000254-2026-05-30-020820-441308-phase-1-research-cycle.html",
+      "markdown": "publications/lab-notes/queue-000254-2026-05-30-020820-441308-phase-1-research-cycle.md",
+      "published_at": "2026-05-30T03:07:25.797923+00:00",
+      "queue_id": 254,
+      "title": "Phase 1 Research Cycle"
+    },
+    {
+      "claim_type": "measured",
+      "correction_path": "https://github.com/canneed02/axiomforge/issues",
+      "evidence": "task_id=259; review_id=52; replication_id=52; review=/root/axiomforge-state/artifacts/review-runs/2026-05-30T030616.140898Z0000-proof-run-51/skeptic_review.json; replication=/root/axiomforge-state/artifacts/review-runs/2026-05-30T030616.140898Z0000-proof-run-51/replication.json; gate=/root/axiomforge-state/artifacts/review-runs/2026-05-30T030616.140898Z0000-proof-run-51/gate.json",
+      "html": "publications/lab-notes/queue-000255-2026-05-30-030616-798399-phase-4-review-replication-cycle.html",
+      "markdown": "publications/lab-notes/queue-000255-2026-05-30-030616-798399-phase-4-review-replication-cycle.md",
+      "published_at": "2026-05-30T03:07:27.687749+00:00",
+      "queue_id": 255,
+      "title": "Phase 4 Review Replication Cycle"
     }
   ]
 }
